@@ -1,71 +1,74 @@
 export default function Home() {
+  const applicants = [
+    { id: 1, name: "Bruce Wayne", date: "27-07-2025", status: "applied" },
+    { id: 2, name: "John Constantine", date: "28-07-2025", status: "rejected" },
+    { id: 3, name: "Jessie Custer", date: "29-07-2025", status: "accepted" },
+  ];
+
+  const badgeStatus = new Map([
+    ["applied", "badge-warning"],
+    ["rejected", "badge-error"],
+    ["accepted", "badge-success"],
+  ]);
+
+  const statusName = new Map([
+    ["applied", "Zaaplikowano"],
+    ["rejected", "Odmowa"],
+    ["accepted", "Zaakceptowano"],
+  ]);
+
   return (
-    <div className="bg-base-200">
-      <main className="">
-        <div className="drawer lg:drawer-open h-screen">
-          <menu className="menu bg-white rounded-box w-64 px-6 py-4">
-            <h2 className="text-2xl font-bold text-blue-600 mb-4">EzHire</h2>
-            <li>
-              <a>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-                Item 2
-              </a>
-            </li>
-            <li>
-              <a>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Item 1
-              </a>
-            </li>
-            <li>
-              <a>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-                Item 3
-              </a>
-            </li>
-          </menu>
+    <div>
+      <div className="flex justify-between">
+        <div>
+          <h2 className="font-extrabold text-3xl mb-4">
+            Frontend Developer (Ember.js)
+          </h2>
+          <div className="flex flex-row gap-4">
+            <h5 className="text-xs flex gap-3 items-center">
+              Utworzono:
+              <div className="font-bold">25-06-2025</div>
+            </h5>
+            <h5 className="text-xs flex gap-3 items-center">
+              Kampania:
+              <div className="font-bold">Chat AI - Nowy zespół</div>
+            </h5>
+            <h5 className="text-xs flex gap-3 items-center">
+              Status:
+              <span className="badge badge-xs badge-outline badge-success">
+                Otwarte
+              </span>
+            </h5>
+          </div>
         </div>
-      </main>
-      <footer className=""></footer>
+        <button className="btn btn-error text-white">Zamknij Rekrutację</button>
+      </div>
+      <div className="overflow-x-auto mt-20">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Imię</th>
+              <th>Data Aplikacji</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {applicants.map((applicant) => (
+              <tr key={applicant.id}>
+                <td>{applicant.name}</td>
+                <td>{applicant.date}</td>
+                <td>
+                  <span
+                    className={`badge badge-xs badge-soft ${badgeStatus.get(applicant.status) ?? ""}`}
+                  >
+                    {statusName.get(applicant.status)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
