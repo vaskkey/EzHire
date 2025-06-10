@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PropsWithChildren } from "react";
-import { HomeIcon, Megaphone } from "lucide-react";
+import { Megaphone } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="ezhire">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-200`}
       >
@@ -49,7 +49,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
               </div>
             </div>
             <main className="bg-base-200 min-h-screen lg:p-6 p-2">
-              <div className="bg-white rounded-md min-h-full p-5">
+              <div className="bg-background rounded-md min-h-full p-5">
                 {children}
               </div>
             </main>
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu bg-white text-base-content min-h-full w-80 p-4">
+            <ul className="menu bg-background text-base-content min-h-full w-80 p-4">
               <h2 className="text-2xl font-bold text-blue-600 mb-4">EzHire</h2>
               <li>
                 <a>
