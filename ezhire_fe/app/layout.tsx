@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PropsWithChildren } from "react";
-import { Megaphone } from "lucide-react";
+import { Megaphone, Moon, Sun } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
             readOnly
           />
           <div className="drawer-content">
-            <div className="navbar lg:px-6 px-2">
+            <div className="navbar lg:px-6 px-2 flex justify-between">
               <div className="breadcrumbs text-sm">
                 <ul>
                   <li>
@@ -47,6 +47,18 @@ export default function RootLayout({ children }: PropsWithChildren) {
                   <li>Frontend Developer (Ember.js)</li>
                 </ul>
               </div>
+              <label className="swap swap-rotate">
+                {/* this hidden checkbox controls the state */}
+                <input
+                  type="checkbox"
+                  className="theme-controller"
+                  value="coolpuff"
+                />
+
+                <Sun className="swap-off" size={18} />
+
+                <Moon className="swap-on" size={18} />
+              </label>
             </div>
             <main className="bg-base-200 min-h-screen lg:p-6 p-2">
               <div className="bg-background rounded-md min-h-full p-5">
@@ -54,7 +66,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
               </div>
             </main>
           </div>
-          <aside className="drawer-side">
+          <aside className="drawer-side bg-green-50">
             <label
               htmlFor="my-drawer"
               aria-label="close sidebar"
