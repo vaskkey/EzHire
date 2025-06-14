@@ -21,5 +21,6 @@ public class RecruitmentCampaign : BaseEntity
     
     [Required]
     [Column("priority")]
+    [EnumDataType(typeof(CampaignPriority))]
     public CampaignPriority Priority { get; set; }
 }

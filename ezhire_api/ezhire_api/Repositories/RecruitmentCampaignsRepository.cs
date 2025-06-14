@@ -22,6 +22,8 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
         return await data.Campaigns.Select(campaign => new RecruitmentCampaignGetDto
             {
                 Id = campaign.Id,
+                Name = campaign.Name,
+                Priority = campaign.Priority,
                 CreatedAt = campaign.CreatedAt,
                 UpdatedAt = campaign.UpdatedAt
             })
@@ -33,6 +35,8 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
         var campaign = await data.Campaigns.Select(campaign => new RecruitmentCampaignGetDto
             {
                 Id = campaign.Id,
+                Name = campaign.Name,
+                Priority = campaign.Priority,
                 CreatedAt = campaign.CreatedAt,
                 UpdatedAt = campaign.UpdatedAt
             })

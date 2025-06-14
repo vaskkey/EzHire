@@ -11,5 +11,6 @@ public class RecruitmentCampaignCreateDto
     public string Name { get; set; } = null!;
     
     [Required]
+    [EnumDataType(typeof(CampaignPriority))]
     public CampaignPriority Priority { get; set; }
 }
