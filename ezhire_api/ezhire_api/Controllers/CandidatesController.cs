@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ezhire_api.Controllers;
 
-[Controller]
+[ApiController]
 [Route("/api/[controller]")]
 public class CandidatesController(ICandidatesService candidates) : ControllerBase
 {

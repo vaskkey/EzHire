@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ezhire_api.Controllers;
 
-[Controller]
+[ApiController]
 [Route("/api/campaigns")]
 public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns) : ControllerBase
 {
