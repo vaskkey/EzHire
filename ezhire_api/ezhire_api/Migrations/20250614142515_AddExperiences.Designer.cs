@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ezhire_api.DAL;
@@ -11,9 +12,11 @@ using ezhire_api.DAL;
 namespace ezhire_api.Migrations
 {
     [DbContext(typeof(EzHireContext))]
-    partial class EzHireContextModelSnapshot : ModelSnapshot
+    [Migration("20250614142515_AddExperiences")]
+    partial class AddExperiences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

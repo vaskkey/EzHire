@@ -1,4 +1,5 @@
 using ezhire_api.DAL;
+using ezhire_api.Repositories;
 using ezhire_api.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<EzHireContext>(opt =>
 });
 
 builder.Services.AddScoped<ICandidatesService, CandidatesService>();
+builder.Services.AddScoped<ICandidateRepository, CandidatesRepository>();
 
 var app = builder.Build();
 

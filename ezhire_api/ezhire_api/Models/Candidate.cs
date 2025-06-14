@@ -15,4 +15,6 @@ public class Candidate : BaseEntity
     [Required]
     [MaxLength(100)]
     public string LastName { get; set; } = null!;
+
+    public virtual ICollection<Experience> Experiences { get; set; } = null!;
 }

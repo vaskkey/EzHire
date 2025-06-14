@@ -5,7 +5,7 @@ namespace ezhire_api.Controllers;
 
 [Controller]
 [Route("/api/[controller]")]
-public class Candidates(ICandidatesService candidates) : ControllerBase
+public class CandidatesController(ICandidatesService candidates) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAllCandidates(CancellationToken cancellation)

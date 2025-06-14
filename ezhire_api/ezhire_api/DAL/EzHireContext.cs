@@ -6,6 +6,7 @@ namespace ezhire_api.DAL;
 public class EzHireContext : DbContext
 {
     public DbSet<Candidate> Candidates { get; set; }
+    public DbSet<Candidate> Experiences { get; set; }
 
     protected EzHireContext()
     {
