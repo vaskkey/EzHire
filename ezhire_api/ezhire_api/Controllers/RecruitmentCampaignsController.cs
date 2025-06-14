@@ -24,7 +24,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     public async Task<IActionResult> CreateCampaign(CancellationToken cancellation,
         [FromBody] RecruitmentCampaignCreateDto campaign)
     {
-        Console.Out.WriteLine(campaign);
-        return Ok(await campaigns.Create(cancellation, campaign));
+        var response = await campaigns.Create(cancellation, campaign);
+        return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }
 }
