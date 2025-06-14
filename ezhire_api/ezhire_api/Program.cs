@@ -16,8 +16,13 @@ builder.Services.AddDbContext<EzHireContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Candidates
 builder.Services.AddScoped<ICandidatesService, CandidatesService>();
 builder.Services.AddScoped<ICandidateRepository, CandidatesRepository>();
+
+// Campaigns
+builder.Services.AddScoped<IRecruitmentCampaignsRepository, RecruitmentCampaignsRepository>();
+builder.Services.AddScoped<IRecruitmentCampaignsService, RecruitmentCampaignsService>();
 
 var app = builder.Build();
 

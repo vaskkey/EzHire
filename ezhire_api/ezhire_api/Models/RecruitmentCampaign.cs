@@ -16,6 +16,7 @@ public class RecruitmentCampaign : BaseEntity
     [Required]
     [Column("name")]
     [MaxLength(150)]
+    [MinLength(2)]
     public string Name { get; set; } = null!;
     
     [Required]
