@@ -6,8 +6,6 @@ namespace ezhire_api.Models;
 [Table("candidates")]
 public class Candidate : BaseEntity
 {
-    [Key] [Column("id")] public int Id { get; set; }
-
     [Column("first_name")]
     [Required]
     [MaxLength(100)]
