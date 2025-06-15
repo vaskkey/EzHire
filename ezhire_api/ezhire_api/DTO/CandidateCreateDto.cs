@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ezhire_api.DTO;
-
-
-public class CandidateExperienceGetDto : BaseResponseDto
+public class CandidateExperienceCreateDto : BaseResponseDto
 {
 
     [Required]
@@ -18,7 +16,7 @@ public class CandidateExperienceGetDto : BaseResponseDto
     public DateTime? DateFinished { get; set; }
 }
 
-public class CandidateGetDto : BaseResponseDto
+public class CandidateCreateDto : BaseResponseDto
 {
     [Required]
     public string FirstName { get; set; } = null!;
@@ -26,9 +24,12 @@ public class CandidateGetDto : BaseResponseDto
     public string LastName { get; set; } = null!;
     
     [Required]
+    [MaxLength(100)]
     [EmailAddress]
     public string Email { get; set; } = null!;
-
+    
     [Required]
-    public ICollection<CandidateExperienceGetDto> Experiences { get; set; } = null!;
+    [MinLength(1)]
+    [MaxLength(50)]
+    public ICollection<CandidateExperienceCreateDto> Experiences { get; set; } = null!;
 }

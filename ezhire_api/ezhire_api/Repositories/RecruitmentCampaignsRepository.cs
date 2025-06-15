@@ -32,7 +32,9 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
 
     public async Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id)
     {
-        var campaign = await data.Campaigns.Select(campaign => new RecruitmentCampaignGetDto
+        var campaign = await data.Campaigns
+            .Where(campaign => campaign.Id == id)
+            .Select(campaign => new RecruitmentCampaignGetDto
             {
                 Id = campaign.Id,
                 Name = campaign.Name,
@@ -50,7 +52,6 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
                     Status = posting.Status
                 }).ToList()
             })
-            .Where(campaign => campaign.Id == id)
             .FirstOrDefaultAsync(cancellation);
 
         return campaign;

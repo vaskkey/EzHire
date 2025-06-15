@@ -36,6 +36,11 @@ builder.Services.AddScoped<IRecruitmentCampaignsService, RecruitmentCampaignsSer
 
 // Postings
 builder.Services.AddScoped<IJobPostingRepository, JobPostingRepository>();
+builder.Services.AddScoped<IJobPostingsService, JobPostingsService>();
+
+// Job Applications
+builder.Services.AddScoped<IJobApplicationsService, JobApplicationsService>();
+builder.Services.AddScoped<IJobApplicationsRepository, JobApplicationsRepository>();
 
 var app = builder.Build();
 

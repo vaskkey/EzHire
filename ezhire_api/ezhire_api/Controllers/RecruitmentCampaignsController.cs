@@ -6,7 +6,7 @@ namespace ezhire_api.Controllers;
 
 [ApiController]
 [Route("/api/campaigns")]
-public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns) : ControllerBase
+public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(ICollection<RecruitmentCampaignGetDto>), StatusCodes.Status200OK)]
@@ -40,7 +40,8 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     public async Task<IActionResult> AddPosting(CancellationToken cancellation, [FromRoute] int id,
         [FromBody] JobPostingCreateDto postingData)
     {
-        var response = await campaigns.AddPosting(cancellation, id, postingData);
-        return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
+        var campaign = await campaigns.GetById(cancellation, id);
+        var response = await postings.AddPosting(cancellation, campaign.Id, postingData);
+        return CreatedAtRoute(nameof(JobPostingsController), new { id = response.Id }, response);
     }
 }
