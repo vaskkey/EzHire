@@ -6,7 +6,9 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+    "format": "bunx prettier . --write",
+    "schema": "bunx openapi-typescript http://localhost:5011/openapi/v1.json -o ./api/v1.d.ts"
 	},
 	"dependencies": {
 		"lucide-react": "^0.513.0",
