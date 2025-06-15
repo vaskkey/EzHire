@@ -23,4 +23,6 @@ public class RecruitmentCampaign : BaseEntity
     [Column("priority")]
     [EnumDataType(typeof(CampaignPriority))]
     public CampaignPriority Priority { get; set; }
+
+    public virtual ICollection<JobPosting> JobPostings { get; set; } = null!;
 }

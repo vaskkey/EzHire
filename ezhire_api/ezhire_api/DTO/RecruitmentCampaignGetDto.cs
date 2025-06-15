@@ -9,5 +9,6 @@ public class RecruitmentCampaignGetDto : BaseResponseDto
     public string Name { get; set; } = null!;
     
     [Required]
+    [EnumDataType(typeof(CampaignPriority))]
     public CampaignPriority Priority { get; set; }
 }
