@@ -24,6 +24,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
                 LastName = candidate.LastName,
                 CreatedAt = candidate.CreatedAt,
                 UpdatedAt = candidate.UpdatedAt,
+                Email = candidate.Email,
                 Experiences = candidate.Experiences.Select(exp => new CandidateExperienceGetDto
                 {
                     Id = exp.Id,

@@ -40,4 +40,6 @@ public class JobPosting : BaseEntity
    public virtual RecruitmentCampaign Campaign { get; set; } = null!;
    
    public virtual ICollection<JobApplication> Applications { get; set; } = null!;
+   
+   public virtual ICollection<RecruitmentStage> Stages { get; set; } = null!;
 }

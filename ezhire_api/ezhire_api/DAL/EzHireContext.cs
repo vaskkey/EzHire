@@ -10,6 +10,10 @@ public class EzHireContext : DbContext
     public DbSet<RecruitmentCampaign> Campaigns { get; set; }
     public DbSet<JobPosting> JobPostings { get; set; }
     public DbSet<JobApplication> JobApplications { get; set; }
+    public DbSet<RecruitmentStage> RecruitmentStages { get; set; }
+    public DbSet<TechnicalMeeting> TechnicalMeetings { get; set; }
+    public DbSet<TeamMeeting> TeamMeetings { get; set; }
+    public DbSet<CultureMeeting> CultureMeetings { get; set; }
 
     protected EzHireContext()
     {
