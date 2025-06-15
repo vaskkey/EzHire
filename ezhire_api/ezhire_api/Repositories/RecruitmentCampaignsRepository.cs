@@ -9,7 +9,7 @@ namespace ezhire_api.Repositories;
 public interface IRecruitmentCampaignsRepository
 {
     public Task<ICollection<RecruitmentCampaignGetDto>> GetAll(CancellationToken cancellation);
-    public Task<RecruitmentCampaignGetDto> GetById(CancellationToken cancellation, int id);
+    public Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id);
 
     public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
         RecruitmentCampaignCreateDto campaign);
@@ -30,7 +30,7 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
             .ToListAsync(cancellation);
     }
 
-    public async Task<RecruitmentCampaignGetDto> GetById(CancellationToken cancellation, int id)
+    public async Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id)
     {
         var campaign = await data.Campaigns.Select(campaign => new RecruitmentCampaignGetDto
             {
@@ -43,22 +43,18 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
             .Where(campaign => campaign.Id == id)
             .FirstOrDefaultAsync(cancellation);
 
-        if (campaign == null)
-        {
-            throw new NotFound();
-        }
-
         return campaign;
     }
 
     public async Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
         RecruitmentCampaignCreateDto campaign)
     {
-        var entry = data.Campaigns.Add(new RecruitmentCampaign
+        var entry = await data.Campaigns.AddAsync(new RecruitmentCampaign
         {
             Name = campaign.Name,
             Priority = campaign.Priority
-        });
+        },
+            cancellation);
 
         await data.SaveChangesAsync(cancellation);
 

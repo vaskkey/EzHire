@@ -17,6 +17,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(RecruitmentCampaignGetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCampaign(CancellationToken cancellation, [FromRoute] int id)
     {
@@ -29,6 +30,17 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
         [FromBody] RecruitmentCampaignCreateDto campaign)
     {
         var response = await campaigns.Create(cancellation, campaign);
+        return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
+    }
+    
+    [HttpPost("{id:int}")]
+    [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddPosting(CancellationToken cancellation, [FromRoute] int id,
+        [FromBody] JobPostingCreateDto postingData)
+    {
+        var response = await campaigns.AddPosting(cancellation, id, postingData);
         return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }
 }
