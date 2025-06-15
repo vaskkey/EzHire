@@ -1,6 +1,7 @@
 using ezhire_api.DAL;
 using ezhire_api.DTO;
 using ezhire_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
@@ -24,24 +25,26 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
 
         await data.SaveChangesAsync(cancellation);
 
-        return new JobPostingGetDto
+        var newPosting = await data.JobPostings.Select(post => new JobPostingGetDto
         {
-            Id = entry.Entity.Id,
-            CreatedAt = entry.Entity.CreatedAt,
-            UpdatedAt = entry.Entity.UpdatedAt,
-            JobName = entry.Entity.JobName,
-            DatePosted = entry.Entity.DatePosted,
-            Description = entry.Entity.Description,
-            Status = entry.Entity.Status,
-            CampaignId = entry.Entity.CampaignId,
+            Id = post.Id,
+            CreatedAt = post.CreatedAt,
+            UpdatedAt = post.UpdatedAt,
+            JobName = post.JobName,
+            DatePosted = post.DatePosted,
+            Description = post.Description,
+            Status = post.Status,
+            CampaignId = post.CampaignId,
             Campaign = new PostingCampaignDto
             {
-                Id = entry.Entity.Campaign.Id,
-                CreatedAt = entry.Entity.Campaign.CreatedAt,
-                UpdatedAt = entry.Entity.Campaign.UpdatedAt,
-                Name = entry.Entity.Campaign.Name,
-                Priority = entry.Entity.Campaign.Priority
+                Id = post.Campaign.Id,
+                CreatedAt = post.Campaign.CreatedAt,
+                UpdatedAt = post.Campaign.UpdatedAt,
+                Name = post.Campaign.Name,
+                Priority = post.Campaign.Priority
             }
-        };
+        }).FirstAsync(post => post.Id == entry.Entity.Id, cancellation);
+
+        return newPosting;
     }
 }

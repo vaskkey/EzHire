@@ -38,7 +38,17 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
                 Name = campaign.Name,
                 Priority = campaign.Priority,
                 CreatedAt = campaign.CreatedAt,
-                UpdatedAt = campaign.UpdatedAt
+                UpdatedAt = campaign.UpdatedAt,
+                Postings = campaign.JobPostings.Select(posting => new CampaignPostingGetDto
+                {
+                    Id = posting.Id,
+                    CreatedAt = posting.CreatedAt,
+                    UpdatedAt = posting.UpdatedAt,
+                    JobName = posting.JobName,
+                    DatePosted = posting.DatePosted,
+                    Description = posting.Description,
+                    Status = posting.Status
+                }).ToList()
             })
             .Where(campaign => campaign.Id == id)
             .FirstOrDefaultAsync(cancellation);

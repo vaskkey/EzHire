@@ -33,7 +33,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
         return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }
     
-    [HttpPost("{id:int}")]
+    [HttpPost("{id:int}/create-posting")]
     [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

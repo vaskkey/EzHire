@@ -53,7 +53,7 @@ public class RecruitmentCampaignsService(IRecruitmentCampaignsRepository campaig
             JobName = posting.JobName,
             Description = posting.Description,
             Status = PostingStatus.OPEN,
-            DatePosted = DateTime.Now,
+            DatePosted = DateTime.UtcNow,
             CampaignId = campaign.Id
         });
     }
