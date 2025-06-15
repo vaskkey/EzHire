@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Models;
 
@@ -31,10 +32,12 @@ public class JobPosting : BaseEntity
    [EnumDataType(typeof(PostingStatus))]
    public PostingStatus Status { get; set; }
    
-   
+   [Required]
    [Column("campaign_id")]
    public int CampaignId { get; set; }
 
    [ForeignKey(nameof(CampaignId))]
    public virtual RecruitmentCampaign Campaign { get; set; } = null!;
+   
+   public virtual ICollection<JobApplication> Applications { get; set; } = null!;
 }

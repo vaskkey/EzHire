@@ -9,6 +9,7 @@ public class EzHireContext : DbContext
     public DbSet<Experience> Experiences { get; set; }
     public DbSet<RecruitmentCampaign> Campaigns { get; set; }
     public DbSet<JobPosting> JobPostings { get; set; }
+    public DbSet<JobApplication> JobApplications { get; set; }
 
     protected EzHireContext()
     {

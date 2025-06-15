@@ -17,4 +17,6 @@ public class Candidate : BaseEntity
     public string LastName { get; set; } = null!;
 
     public virtual ICollection<Experience> Experiences { get; set; } = null!;
+    
+    public virtual ICollection<JobApplication> Applications { get; set; } = null!;
 }
