@@ -1,7 +1,5 @@
-using ezhire_api.DAL;
 using ezhire_api.DTO;
 using ezhire_api.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Services;
 
