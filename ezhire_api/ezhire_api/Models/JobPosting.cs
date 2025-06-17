@@ -13,33 +13,28 @@ public enum PostingStatus
 [Table("job_postings")]
 public class JobPosting : BaseEntity
 {
-   [Required]
-   [Column("job_name")]
-   [MaxLength(200)]
-   public string JobName { get; set; } = null!;
-   
-   [Required]
-   [Column("date_posted")]
-   public DateTime DatePosted { get; set; }
+    [Required]
+    [Column("job_name")]
+    [MaxLength(200)]
+    public string JobName { get; set; } = null!;
 
-   [Required]
-   [Column("description")]
-   [MaxLength(1500)]
-   public string Description { get; set; } = null!;
-   
-   [Required]
-   [Column("status")]
-   [EnumDataType(typeof(PostingStatus))]
-   public PostingStatus Status { get; set; }
-   
-   [Required]
-   [Column("campaign_id")]
-   public int CampaignId { get; set; }
+    [Required] [Column("date_posted")] public DateTime DatePosted { get; set; }
 
-   [ForeignKey(nameof(CampaignId))]
-   public virtual RecruitmentCampaign Campaign { get; set; } = null!;
-   
-   public virtual ICollection<JobApplication> Applications { get; set; } = null!;
-   
-   public virtual ICollection<RecruitmentStage> Stages { get; set; } = null!;
+    [Required]
+    [Column("description")]
+    [MaxLength(1500)]
+    public string Description { get; set; } = null!;
+
+    [Required]
+    [Column("status")]
+    [EnumDataType(typeof(PostingStatus))]
+    public PostingStatus Status { get; set; }
+
+    [Required] [Column("campaign_id")] public int CampaignId { get; set; }
+
+    [ForeignKey(nameof(CampaignId))] public virtual RecruitmentCampaign Campaign { get; set; } = null!;
+
+    public virtual ICollection<JobApplication> Applications { get; set; } = null!;
+
+    public virtual ICollection<RecruitmentStage> Stages { get; set; } = null!;
 }

@@ -14,7 +14,7 @@ public class RecruitmentStagesController(IRecruitmentStagesService stages) : Con
     {
         return Ok(await stages.GetAllForId(cancellation, stageId));
     }
-    
+
     [ProducesResponseType(typeof(RecruitmentStageGetDto), StatusCodes.Status200OK)]
     [HttpGet("{stageId:int}")]
     public async Task<IActionResult> GetStage(CancellationToken cancellation, [FromRoute] int stageId)

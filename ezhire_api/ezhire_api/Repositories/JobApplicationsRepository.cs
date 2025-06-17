@@ -36,7 +36,7 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
                     JobName = application.Posting.JobName,
                     DatePosted = application.Posting.DatePosted,
                     Description = application.Posting.Description,
-                    Status = application.Posting.Status,
+                    Status = application.Posting.Status
                 },
                 Applicant = new ApplicantDto
                 {
@@ -45,8 +45,8 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
                     UpdatedAt = application.Applicant.UpdatedAt,
                     FirstName = application.Applicant.FirstName,
                     LastName = application.Applicant.LastName,
-                    Email = application.Applicant.Email,
-                },
+                    Email = application.Applicant.Email
+                }
             })
             .FirstOrDefaultAsync(cancellation);
     }
@@ -73,7 +73,7 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
                     JobName = application.Posting.JobName,
                     DatePosted = application.Posting.DatePosted,
                     Description = application.Posting.Description,
-                    Status = application.Posting.Status,
+                    Status = application.Posting.Status
                 },
                 Applicant = new ApplicantDto
                 {
@@ -82,8 +82,8 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
                     UpdatedAt = application.Applicant.UpdatedAt,
                     FirstName = application.Applicant.FirstName,
                     LastName = application.Applicant.LastName,
-                    Email = application.Applicant.Email,
-                },
+                    Email = application.Applicant.Email
+                }
             })
             .FirstOrDefaultAsync(cancellation);
     }
@@ -95,18 +95,11 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
             DateApplied = application.DateApplied,
             Status = application.Status,
             PostingId = application.PostingId,
-            ApplicantId = application.ApplicantId,
+            ApplicantId = application.ApplicantId
         }, cancellation);
 
         await data.SaveChangesAsync(cancellation);
 
-        var applicationData = await GetById(cancellation, entity.Entity.Id);
-
-        if (applicationData == null)
-        {
-            throw new InvalidAsynchronousStateException($"Application with id {entity.Entity.Id} not found after creation");
-        }
-
-        return applicationData;
+        return await GetById(cancellation, entity.Entity.Id);
     }
 }

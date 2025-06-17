@@ -15,7 +15,7 @@ public class Candidate : BaseEntity
     [Required]
     [MaxLength(100)]
     public string LastName { get; set; } = null!;
-    
+
     [Column("email")]
     [Required]
     [MaxLength(100)]
@@ -23,6 +23,6 @@ public class Candidate : BaseEntity
     public string Email { get; set; } = null!;
 
     public virtual ICollection<Experience> Experiences { get; set; } = null!;
-    
+
     public virtual ICollection<JobApplication> Applications { get; set; } = null!;
 }

@@ -18,7 +18,7 @@ public class RecruitmentCampaign : BaseEntity
     [MaxLength(150)]
     [MinLength(2)]
     public string Name { get; set; } = null!;
-    
+
     [Required]
     [Column("priority")]
     [EnumDataType(typeof(CampaignPriority))]

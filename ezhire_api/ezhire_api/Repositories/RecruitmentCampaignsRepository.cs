@@ -61,10 +61,10 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
         RecruitmentCampaignCreateDto campaign)
     {
         var entry = await data.Campaigns.AddAsync(new RecruitmentCampaign
-        {
-            Name = campaign.Name,
-            Priority = campaign.Priority
-        },
+            {
+                Name = campaign.Name,
+                Priority = campaign.Priority
+            },
             cancellation);
 
         await data.SaveChangesAsync(cancellation);

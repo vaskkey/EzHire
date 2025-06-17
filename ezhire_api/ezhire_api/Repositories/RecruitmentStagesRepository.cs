@@ -31,7 +31,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
             .Include(stage => stage.Posting)
             .Where(stage => stage.Id == stageId)
             .ToListAsync(cancellation);
-        
+
         return filteredStages.Select(GetCorrectStage).FirstOrDefault();
     }
 
@@ -57,7 +57,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
             PostingId = meeting.PostingId,
             TeamName = meeting.TeamName
         }, cancellation);
-        
+
         await data.SaveChangesAsync(cancellation);
 
         return await GetById(cancellation, record.Entity.Id);
@@ -71,7 +71,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
             PostingId = meeting.PostingId,
             Values = meeting.Values
         }, cancellation);
-        
+
         await data.SaveChangesAsync(cancellation);
 
         return await GetById(cancellation, record.Entity.Id);
@@ -79,20 +79,11 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
 
     private RecruitmentStageGetDto GetCorrectStage(RecruitmentStage stage)
     {
-        if (stage is TechnicalMeeting technical)
-        {
-            return GetTechnicalDto(technical);
-        }
-        
-        if (stage is TeamMeeting team)
-        {
-            return GetTeamDto(team);
-        }
-        
-        if (stage is CultureMeeting culture)
-        {
-            return GetCultureDto(culture);
-        }
+        if (stage is TechnicalMeeting technical) return GetTechnicalDto(technical);
+
+        if (stage is TeamMeeting team) return GetTeamDto(team);
+
+        if (stage is CultureMeeting culture) return GetCultureDto(culture);
 
         throw new Exception("Unknown recruitment type");
     }
@@ -113,7 +104,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
                 JobName = stage.Posting.JobName,
                 DatePosted = stage.Posting.DatePosted,
                 Description = stage.Posting.Description,
-                Status = stage.Posting.Status,
+                Status = stage.Posting.Status
             },
             TeamName = stage.TeamName
         };
@@ -135,7 +126,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
                 JobName = stage.Posting.JobName,
                 DatePosted = stage.Posting.DatePosted,
                 Description = stage.Posting.Description,
-                Status = stage.Posting.Status,
+                Status = stage.Posting.Status
             },
             Values = stage.Values
         };
@@ -155,9 +146,9 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
                 JobName = stage.Posting.JobName,
                 DatePosted = stage.Posting.DatePosted,
                 Description = stage.Posting.Description,
-                Status = stage.Posting.Status,
+                Status = stage.Posting.Status
             },
-            TechnologyName = stage.TechnologyName,
+            TechnologyName = stage.TechnologyName
         };
     }
 }

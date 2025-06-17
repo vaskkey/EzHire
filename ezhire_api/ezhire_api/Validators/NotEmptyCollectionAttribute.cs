@@ -8,10 +8,7 @@ public class NotEmptyCollectionAttribute : ValidationAttribute
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         // Check for null
-        if (value == null)
-        {
-            return new ValidationResult($"{validationContext.DisplayName} is required.");
-        }
+        if (value == null) return new ValidationResult($"{validationContext.DisplayName} is required.");
 
         // Try to treat the value as a collection of strings
         if (value is IEnumerable<string> collection)
@@ -22,7 +19,8 @@ public class NotEmptyCollectionAttribute : ValidationAttribute
 
             // Check each string in the collection
             if (list.Any(s => string.IsNullOrWhiteSpace(s)))
-                return new ValidationResult($"{validationContext.DisplayName} must not contain empty or whitespace strings.");
+                return new ValidationResult(
+                    $"{validationContext.DisplayName} must not contain empty or whitespace strings.");
 
             return ValidationResult.Success;
         }

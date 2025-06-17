@@ -9,6 +9,7 @@ public interface IRecruitmentCampaignsService
 {
     public Task<ICollection<RecruitmentCampaignGetDto>> GetAll(CancellationToken cancellation);
     public Task<RecruitmentCampaignGetDto> GetById(CancellationToken cancellation, int id);
+
     public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
         RecruitmentCampaignCreateDto campaign);
 }
@@ -23,11 +24,8 @@ public class RecruitmentCampaignsService(IRecruitmentCampaignsRepository campaig
     public async Task<RecruitmentCampaignGetDto> GetById(CancellationToken cancellation, int id)
     {
         var campaign = await campaigns.GetById(cancellation, id);
-        
-        if (campaign == null)
-        {
-            throw new NotFound();
-        }
+
+        if (campaign == null) throw new NotFound();
 
         return campaign;
     }

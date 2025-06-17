@@ -6,7 +6,8 @@ namespace ezhire_api.Controllers;
 
 [ApiController]
 [Route("/api/campaigns")]
-public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings) : ControllerBase
+public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings)
+    : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(ICollection<RecruitmentCampaignGetDto>), StatusCodes.Status200OK)]
@@ -32,7 +33,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
         var response = await campaigns.Create(cancellation, campaign);
         return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }
-    
+
     [HttpPost("{id:int}/create-posting")]
     [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

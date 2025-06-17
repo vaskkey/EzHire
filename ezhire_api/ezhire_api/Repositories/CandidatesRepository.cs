@@ -10,7 +10,8 @@ public interface ICandidateRepository
     public Task<ICollection<CandidateGetDto>> GetAll(CancellationToken cancellation);
     Task<CandidateGetDto> Create(CancellationToken cancellation, CandidateCreateDto candidate);
 
-    Task<Experience> CreateExperience(CancellationToken cancellation, int candidateId, CandidateExperienceCreateDto experience);
+    Task<Experience> CreateExperience(CancellationToken cancellation, int candidateId,
+        CandidateExperienceCreateDto experience);
 }
 
 public class CandidatesRepository(EzHireContext data) : ICandidateRepository
@@ -45,11 +46,11 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
         {
             FirstName = candidate.FirstName,
             LastName = candidate.LastName,
-            Email = candidate.Email,
+            Email = candidate.Email
         }, cancellation);
-        
+
         await data.SaveChangesAsync(cancellation);
-        
+
         var promises = candidate.Experiences.Select(exp => CreateExperience(cancellation, entity.Entity.Id, exp));
 
         var experiences = await Task.WhenAll(promises);
@@ -72,7 +73,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
                 CompanyName = exp.CompanyName,
                 JobName = exp.JobName,
                 DateStarted = exp.DateStarted,
-                DateFinished = exp.DateFinished,
+                DateFinished = exp.DateFinished
             }).ToList()
         };
     }
@@ -86,7 +87,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
             JobName = experience.JobName,
             DateStarted = experience.DateStarted,
             DateFinished = experience.DateFinished,
-            CandidateId = candidateId,
+            CandidateId = candidateId
         }, cancellation);
 
         return entity.Entity;

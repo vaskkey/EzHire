@@ -28,14 +28,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
 
         await data.SaveChangesAsync(cancellation);
 
-        var newPosting = await GetById(cancellation, entry.Entity.Id);
-
-        if (newPosting == null)
-        {
-            throw new InvalidAsynchronousStateException($"Posting with id {entry.Entity.Id} not found after creation");
-        }
-
-        return newPosting;
+        return await GetById(cancellation, entry.Entity.Id);
     }
 
     public async Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId)

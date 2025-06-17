@@ -43,10 +43,7 @@ public class JobPostingsService(
     public async Task<JobPostingGetDto> GetById(CancellationToken cancellation, int postingId)
     {
         var posting = await jobPosting.GetById(cancellation, postingId);
-        if (posting == null)
-        {
-            throw new NotFound();
-        }
+        if (posting == null) throw new NotFound();
 
         return posting;
     }
@@ -56,10 +53,8 @@ public class JobPostingsService(
     {
         var application = await jobApplications.GetByEmail(cancellation, candidateApplication.Email, id);
         if (application != null)
-        {
             throw new UnprocessibleEntity(
                 $"Application for this posting already exists for email {candidateApplication.Email}");
-        }
 
 
         var candidate = await candidates.Create(cancellation, candidateApplication);
@@ -68,7 +63,7 @@ public class JobPostingsService(
             DateApplied = DateTime.UtcNow,
             Status = ApplicationStatus.APPLIED,
             ApplicantId = candidate.Id,
-            PostingId = id,
+            PostingId = id
         });
 
         return newApplication;
