@@ -14,6 +14,7 @@ public class EzHireContext : DbContext
     public DbSet<TechnicalMeeting> TechnicalMeetings { get; set; }
     public DbSet<TeamMeeting> TeamMeetings { get; set; }
     public DbSet<CultureMeeting> CultureMeetings { get; set; }
+    public DbSet<RecruitmentStageMeeting> RecruitmentStageMeetings { get; set; }
 
     protected EzHireContext()
     {
