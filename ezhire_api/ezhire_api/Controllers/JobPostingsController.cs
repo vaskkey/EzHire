@@ -6,7 +6,7 @@ namespace ezhire_api.Controllers;
 
 [ApiController]
 [Route("/api/postings")]
-public class JobPostingsController(IJobPostingsService postings) : ControllerBase
+public class JobPostingsController(IJobPostingsService postings, IRecruitmentStagesService stages) : ControllerBase
 {
     [ProducesResponseType(typeof(ICollection<CampaignPostingGetDto>), StatusCodes.Status200OK)]
     [HttpGet]

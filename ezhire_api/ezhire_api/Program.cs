@@ -42,6 +42,10 @@ builder.Services.AddScoped<IJobPostingsService, JobPostingsService>();
 builder.Services.AddScoped<IJobApplicationsService, JobApplicationsService>();
 builder.Services.AddScoped<IJobApplicationsRepository, JobApplicationsRepository>();
 
+// Recruitment stages
+builder.Services.AddScoped<IRecruitmentStagesService, RecruitmentStagesService>();
+builder.Services.AddScoped<IRecruitmentStagesRepository, RecruitmentStagesRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

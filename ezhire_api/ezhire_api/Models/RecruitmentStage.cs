@@ -9,7 +9,7 @@ public abstract class RecruitmentStage : BaseEntity
    [Required]
    [Column("description")]
    [MaxLength(250)]
-   public string Desription { get; set; } = null!;
+   public string Description { get; set; } = null!;
    
    [Column("posting_id")]
    public int PostingId { get; set; }
