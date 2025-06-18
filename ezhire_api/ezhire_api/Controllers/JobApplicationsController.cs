@@ -39,4 +39,20 @@ public class JobApplicationsController(IJobApplicationsService applications) : C
     {
         return Ok(await applications.Accept(cancellation, id));
     }
+    
+    [ProducesResponseType(typeof(JobApplicationGetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JobApplicationGetDto), StatusCodes.Status404NotFound)]
+    [HttpPost("{id:int}/plan-meeting")]
+    public async Task<IActionResult> PlanMeeting(CancellationToken cancellation, [FromRoute] int id, [FromBody] ApplicationMeetingPlanDto plannedMeeting)
+    {
+        return Ok(await applications.PlanMeeting(cancellation, id, plannedMeeting));
+    }
+    
+    [ProducesResponseType(typeof(JobApplicationGetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JobApplicationGetDto), StatusCodes.Status404NotFound)]
+    [HttpPost("{id:int}/log-meeting")]
+    public async Task<IActionResult> LogMeeting(CancellationToken cancellation, [FromRoute] int id, [FromBody] ApplicationMeetingLogDto log)
+    {
+        return Ok(await applications.LogMeeting(cancellation, id, log));
+    }
 }

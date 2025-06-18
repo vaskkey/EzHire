@@ -12,6 +12,8 @@ public interface IJobApplicationsService
     public Task<JobApplicationGetDto> Create(CancellationToken cancellation, JobApplicationCreateDto application);
     public Task<JobApplicationGetDto> Reject(CancellationToken cancellation, int applicationId);
     public Task<JobApplicationGetDto> Accept(CancellationToken cancellation, int applicationId);
+    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting);
+    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto plannedMeeting);
 }
 
 public class JobApplicationsService(IJobApplicationsRepository applications) : IJobApplicationsService
@@ -60,5 +62,14 @@ public class JobApplicationsService(IJobApplicationsRepository applications) : I
         }
 
         return record;
+    }
+
+    public Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
+    {
+        var record = applications.GetMeeting(cancellation, id, plannedMeeting.RecruitmentStageId);
+    }
+
+    public Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto plannedMeeting)
+    {
     }
 }

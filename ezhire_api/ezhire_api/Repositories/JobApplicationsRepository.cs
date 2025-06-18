@@ -16,9 +16,11 @@ public interface IJobApplicationsRepository
         ApplicationStatus status);
 
     Task<ICollection<PostingApplicationDto>> GetByPostingId(CancellationToken cancellation, int postingId);
+    Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId, int stageId);
 }
 
-public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRepository
+public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRepository stages)
+    : IJobApplicationsRepository
 {
     public async Task<JobApplicationGetDto?> GetById(CancellationToken cancellation, int id)
     {
@@ -184,5 +186,33 @@ public class JobApplicationsRepository(EzHireContext data) : IJobApplicationsRep
                 }
             )
             .ToListAsync(cancellation);
+    }
+
+    public async Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId,
+        int stageId)
+    {
+        return await data.RecruitmentStageMeetings
+            .Where(meeting => meeting.ApplicationId == applicationId && meeting.RecruitmentStageId == stageId)
+            .Select(meeting => new RecruitmentStageMeetingGetDto
+            {
+                Id = meeting.Id,
+                CreatedAt = meeting.CreatedAt,
+                UpdatedAt = meeting.UpdatedAt,
+                Date = meeting.Date,
+                Grade = meeting.Grade,
+                Comment = meeting.Comment,
+                Stage = stages.GetCorrectStage(meeting.Stage),
+                Application = new JobApplicationGetDto
+                {
+                    Id = meeting.Application.Id,
+                    CreatedAt = meeting.Application.CreatedAt,
+                    UpdatedAt = meeting.Application.UpdatedAt,
+                    DateApplied = meeting.Application.DateApplied,
+                    Status = meeting.Application.Status,
+                    PostingId = meeting.Application.PostingId,
+                    ApplicantId = meeting.Application.ApplicantId,
+                }
+            })
+            .FirstOrDefaultAsync(cancellation);
     }
 }

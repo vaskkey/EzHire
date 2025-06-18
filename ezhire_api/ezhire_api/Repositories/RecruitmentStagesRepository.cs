@@ -13,6 +13,7 @@ public interface IRecruitmentStagesRepository
     Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, TechnicalMeetingCreateDto meeting);
     Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, TeamMeetingCreateDto meeting);
     Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, CultureMeetingCreateDto meeting);
+    public RecruitmentStageGetDto GetCorrectStage(RecruitmentStage stage);
 }
 
 public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStagesRepository
@@ -77,7 +78,7 @@ public class RecruitmentStagesRepository(EzHireContext data) : IRecruitmentStage
         return await GetById(cancellation, record.Entity.Id);
     }
 
-    private RecruitmentStageGetDto GetCorrectStage(RecruitmentStage stage)
+    public RecruitmentStageGetDto GetCorrectStage(RecruitmentStage stage)
     {
         if (stage is TechnicalMeeting technical) return GetTechnicalDto(technical);
 
