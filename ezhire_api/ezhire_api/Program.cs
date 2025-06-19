@@ -1,7 +1,9 @@
 using ezhire_api.DAL;
 using ezhire_api.Middlewares;
+using ezhire_api.Models;
 using ezhire_api.Repositories;
 using ezhire_api.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,38 @@ builder.Services.AddDbContext<EzHireContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// AUTH
+// In Program.cs or Startup.cs
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+    {
+        // Password settings
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 8;
+// Lockout settings
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.AllowedForNewUsers = true;
+// User settings
+        options.User.AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        options.User.RequireUniqueEmail = true;
+    })
+    .AddEntityFrameworkStores<EzHireContext>()
+    .AddDefaultTokenProviders();
+// Configure cookie settings
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
 // Candidates
 builder.Services.AddScoped<ICandidatesService, CandidatesService>();
 builder.Services.AddScoped<ICandidateRepository, CandidatesRepository>();
@@ -43,6 +77,11 @@ builder.Services.AddScoped<IJobApplicationsRepository, JobApplicationsRepository
 // Recruitment stages
 builder.Services.AddScoped<IRecruitmentStagesService, RecruitmentStagesService>();
 builder.Services.AddScoped<IRecruitmentStagesRepository, RecruitmentStagesRepository>();
+
+// AUTH Services
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<EzHireContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

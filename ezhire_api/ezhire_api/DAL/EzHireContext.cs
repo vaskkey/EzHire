@@ -1,9 +1,11 @@
 using ezhire_api.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.DAL;
 
-public class EzHireContext : DbContext
+public class EzHireContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Candidate> Candidates { get; set; }
     public DbSet<Experience> Experiences { get; set; }
@@ -16,12 +18,17 @@ public class EzHireContext : DbContext
     public DbSet<CultureMeeting> CultureMeetings { get; set; }
     public DbSet<RecruitmentStageMeeting> RecruitmentStageMeetings { get; set; }
     public DbSet<Offer> Offers { get; set; }
+    
+    
+    public DbSet<User> Users { get; set; }
+    public DbSet<HiringManager> HiringManagers { get; set; }
+    public DbSet<Recruiter> Recruiters { get; set; }
 
     protected EzHireContext()
     {
     }
 
-    public EzHireContext(DbContextOptions options) : base(options)
+    public EzHireContext(DbContextOptions<EzHireContext> options) : base(options)
     {
     }
 

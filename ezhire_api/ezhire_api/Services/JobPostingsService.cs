@@ -52,7 +52,19 @@ public class JobPostingsService(
     public async Task<JobApplicationGetDto> Apply(CancellationToken cancellation, int id,
         CandidateCreateDto candidateApplication)
     {
-        var application = await jobApplications.GetByEmail(cancellation, candidateApplication.Email, id);
+        var posting = await jobPosting.GetById(cancellation, id);
+
+        if (posting == null)
+        {
+            throw new NotFound();
+        }
+
+        if (posting.Status == PostingStatus.CLOSED)
+        {
+            throw new BadRequest("Posting is in invalid state");
+        }
+
+        var application = await jobApplications.GetByEmail(cancellation, candidateApplication.Email, posting.Id);
         if (application != null)
             throw new UnprocessableEntity(
                 $"Application for this posting already exists for email {candidateApplication.Email}");
