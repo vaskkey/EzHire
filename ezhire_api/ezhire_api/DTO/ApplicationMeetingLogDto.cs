@@ -5,9 +5,7 @@ namespace ezhire_api.DTO;
 
 public class ApplicationMeetingPlanDto
 {
-    [Required]
-    [NotInPast]
-    public DateOnly Date { get; set; }
+    [Required] [NotInPast] public DateOnly Date { get; set; }
 
     [Required] [Range(1, int.MaxValue)] public int RecruitmentStageId { get; set; }
 

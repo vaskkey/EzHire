@@ -11,6 +11,8 @@ public interface IJobPostingRepository
     public Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, JobPostingCreateDto posting);
     Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId);
     Task<JobPostingGetDto?> GetById(CancellationToken cancellation, int postingId);
+    Task<JobPostingGetDto> Close(CancellationToken cancellation, JobPostingGetDto postingToClose);
+    Task RejectRemainingApplicants(CancellationToken cancellation, JobPostingGetDto posting);
 }
 
 public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
@@ -73,5 +75,52 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
                 }
             })
             .FirstOrDefaultAsync(cancellation);
+    }
+
+    public async Task<JobPostingGetDto> Close(CancellationToken cancellation, JobPostingGetDto postingToClose)
+    {
+        var posting = await data.JobPostings
+            .Where(posting => posting.Id == postingToClose.Id)
+            .Include(posting => posting.Campaign)
+            .FirstAsync(cancellation);
+
+        data.JobPostings.Update(posting);
+
+        posting.Status = PostingStatus.CLOSED;
+
+        await data.SaveChangesAsync(cancellation);
+
+        return new JobPostingGetDto
+        {
+            Id = posting.Id,
+            CreatedAt = posting.CreatedAt,
+            UpdatedAt = posting.UpdatedAt,
+            JobName = posting.JobName,
+            DatePosted = posting.DatePosted,
+            Description = posting.Description,
+            Status = posting.Status,
+            CampaignId = posting.CampaignId,
+            Campaign = new PostingCampaignDto
+            {
+                Id = posting.Campaign.Id,
+                CreatedAt = posting.Campaign.CreatedAt,
+                UpdatedAt = posting.Campaign.UpdatedAt,
+                Name = posting.Campaign.Name,
+                Priority = posting.Campaign.Priority
+            }
+        };
+    }
+
+    public async Task RejectRemainingApplicants(CancellationToken cancellation, JobPostingGetDto posting)
+    {
+        var applications = await data.JobApplications
+            .Where(application => application.PostingId == posting.Id &&
+                                  application.Status != ApplicationStatus.ACCEPTED &&
+                                  application.Status != ApplicationStatus.REJECTED)
+            .ToListAsync(cancellation);
+
+        data.JobApplications.UpdateRange(applications);
+
+        applications.ForEach(application => application.Status = ApplicationStatus.REJECTED);
     }
 }

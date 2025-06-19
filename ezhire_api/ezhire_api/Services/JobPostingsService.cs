@@ -14,6 +14,7 @@ public interface IJobPostingsService
     Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId);
     Task<JobPostingGetDto> GetById(CancellationToken cancellation, int postingId);
     Task<JobApplicationGetDto> Apply(CancellationToken cancellation, int id, CandidateCreateDto candidateApplication);
+    Task<JobPostingGetDto> Close(CancellationToken cancellation, int postingId);
 }
 
 public class JobPostingsService(
@@ -67,5 +68,17 @@ public class JobPostingsService(
         });
 
         return newApplication;
+    }
+
+    public async Task<JobPostingGetDto> Close(CancellationToken cancellation, int postingId)
+    {
+        var posting = await GetById(cancellation, postingId);
+
+        if (posting.Status != PostingStatus.OPEN) throw new BadRequest("Posting is in invalid state");
+
+        posting = await jobPosting.Close(cancellation, posting);
+        await jobPosting.RejectRemainingApplicants(cancellation, posting);
+
+        return posting;
     }
 }

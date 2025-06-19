@@ -23,7 +23,7 @@ public class JobPostingsController(IJobPostingsService postings, IRecruitmentSta
         return Ok(await postings.GetById(cancellation, id));
     }
 
-    [ProducesResponseType(typeof(JobApplicationGetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [HttpPost("{id:int}")]
     public async Task<IActionResult> ApplyToPosting(CancellationToken cancellation,
@@ -31,5 +31,15 @@ public class JobPostingsController(IJobPostingsService postings, IRecruitmentSta
         [FromBody] CandidateCreateDto candidateApplication)
     {
         return Ok(await postings.Apply(cancellation, id, candidateApplication));
+    }
+
+    [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [HttpPost("{id:int}/close")]
+    public async Task<IActionResult> ClosePosting(CancellationToken cancellation,
+        [FromRoute] int id)
+    {
+        return Ok(await postings.Close(cancellation, id));
     }
 }

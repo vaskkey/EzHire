@@ -25,5 +25,7 @@ public class NotInPastAttribute : ValidationAttribute
     }
 
     public override string FormatErrorMessage(string name)
-        => $"{name} must be today or in the future.";
+    {
+        return $"{name} must be today or in the future.";
+    }
 }
