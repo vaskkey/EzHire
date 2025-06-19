@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ezhire_api.DTO;
 using ezhire_api.Exceptions;
 using ezhire_api.Models;
@@ -64,12 +65,28 @@ public class JobApplicationsService(IJobApplicationsRepository applications) : I
         return record;
     }
 
-    public Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
+    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
     {
         var record = applications.GetMeeting(cancellation, id, plannedMeeting.RecruitmentStageId);
+        if (record != null)
+        {
+            throw new BadRequest("Meeting of this type has already taken place");
+        }
+        
+       return await applications.PlanMeeting(cancellation, id, plannedMeeting);
     }
 
-    public Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto plannedMeeting)
+    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog)
     {
+        var record =  await applications.LogMeeting(cancellation, id, meetingLog);
+        
+        if (record == null)
+        {
+            throw new NotFound();
+        }
+        
+        
+
+        return record;
     }
 }

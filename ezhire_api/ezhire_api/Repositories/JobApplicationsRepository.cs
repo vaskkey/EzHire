@@ -17,6 +17,9 @@ public interface IJobApplicationsRepository
 
     Task<ICollection<PostingApplicationDto>> GetByPostingId(CancellationToken cancellation, int postingId);
     Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId, int stageId);
+    Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int meetingId);
+    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting);
+    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog);
 }
 
 public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRepository stages)
@@ -214,5 +217,66 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
                 }
             })
             .FirstOrDefaultAsync(cancellation);
+    }
+
+    public async Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int meetingId)
+    {
+        return await data.RecruitmentStageMeetings
+            .Where(meeting => meeting.Id == meetingId)
+            .Select(meeting => new RecruitmentStageMeetingGetDto
+            {
+                Id = meeting.Id,
+                CreatedAt = meeting.CreatedAt,
+                UpdatedAt = meeting.UpdatedAt,
+                Date = meeting.Date,
+                Grade = meeting.Grade,
+                Comment = meeting.Comment,
+                Stage = stages.GetCorrectStage(meeting.Stage),
+                Application = new JobApplicationGetDto
+                {
+                    Id = meeting.Application.Id,
+                    CreatedAt = meeting.Application.CreatedAt,
+                    UpdatedAt = meeting.Application.UpdatedAt,
+                    DateApplied = meeting.Application.DateApplied,
+                    Status = meeting.Application.Status,
+                    PostingId = meeting.Application.PostingId,
+                    ApplicantId = meeting.Application.ApplicantId,
+                }
+            })
+            .FirstOrDefaultAsync(cancellation);
+    }
+
+    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
+    {
+        await data.RecruitmentStageMeetings.AddAsync(new RecruitmentStageMeeting
+        {
+            Date = plannedMeeting.Date,
+            ApplicationId = plannedMeeting.ApplicationId,
+            RecruitmentStageId = plannedMeeting.RecruitmentStageId,
+        }, cancellation);
+
+        await data.SaveChangesAsync(cancellation);
+
+        return await GetMeeting(cancellation, plannedMeeting.ApplicationId, plannedMeeting.RecruitmentStageId);
+    }
+
+    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog)
+    {
+        var meeting = await data.RecruitmentStageMeetings
+            .FirstOrDefaultAsync(meeting => meeting.Id == meetingLog.MeetingId);
+
+        if (meeting == null)
+        {
+            return null;
+        }
+
+        data.RecruitmentStageMeetings.Update(meeting);
+
+        meeting.Comment = meetingLog.Comment;
+        meeting.Grade = meetingLog.Grade;
+
+        await data.SaveChangesAsync(cancellation);
+
+        return await GetMeeting(cancellation, id);
     }
 }

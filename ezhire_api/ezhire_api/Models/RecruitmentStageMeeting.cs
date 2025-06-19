@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Models;
 
 [Table("recruitment_stage_meeting")]
+[Index(nameof(ApplicationId), nameof(RecruitmentStageId), IsUnique = true)]
 public class RecruitmentStageMeeting : BaseEntity
 {
    [Required]

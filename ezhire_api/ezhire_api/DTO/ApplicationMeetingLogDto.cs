@@ -9,6 +9,9 @@ public class ApplicationMeetingPlanDto
 
    [Required]
    public int RecruitmentStageId { get; set; }
+   
+   [Required]
+   public int ApplicationId { get; set; }
 }
 
 public class ApplicationMeetingLogDto
