@@ -196,6 +196,8 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
         int stageId)
     {
         return await data.RecruitmentStageMeetings
+            .Include(meeting => meeting.Stage)
+            .ThenInclude(stage => stage.Posting)
             .Where(meeting => meeting.ApplicationId == applicationId && meeting.RecruitmentStageId == stageId)
             .Select(meeting => new RecruitmentStageMeetingGetDto
             {

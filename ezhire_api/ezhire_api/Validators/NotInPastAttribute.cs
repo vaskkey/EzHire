@@ -13,6 +13,10 @@ public class NotInPastAttribute : ValidationAttribute
             date = (DateTime)value;
         else if (value is DateTime?)
             date = ((DateTime?)value).Value;
+        else if (value is DateOnly)
+            date = ((DateOnly)value).ToDateTime(TimeOnly.MinValue);
+        else if (value is DateOnly?)
+            date = ((DateOnly?)value).Value.ToDateTime(TimeOnly.MinValue);
         else
             return false;
 

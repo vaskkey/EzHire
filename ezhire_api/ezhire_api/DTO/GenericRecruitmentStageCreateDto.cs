@@ -42,5 +42,5 @@ public class GenericRecruitmentStageCreateDto
     public string? TeamName { get; set; } = null!;
 
     // Culture Meeting
-    [MinLength(1)] public ICollection<string>? Values { get; set; }
+    [MinLength(1)] public ICollection<string> Values { get; set; }
 }
