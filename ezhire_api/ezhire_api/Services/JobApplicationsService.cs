@@ -13,13 +13,18 @@ public interface IJobApplicationsService
     public Task<JobApplicationGetDto> Create(CancellationToken cancellation, JobApplicationCreateDto application);
     public Task<JobApplicationGetDto> Reject(CancellationToken cancellation, int applicationId);
     public Task<JobApplicationGetDto> Accept(CancellationToken cancellation, int applicationId);
-    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting);
-    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto plannedMeeting);
+
+    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingPlanDto plannedMeeting);
+
+    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingLogDto plannedMeeting);
 }
 
 public class JobApplicationsService(IJobApplicationsRepository applications) : IJobApplicationsService
 {
-    public async Task<ICollection<PostingApplicationDto>> GetAllForPosting(CancellationToken cancellation, int postingId)
+    public async Task<ICollection<PostingApplicationDto>> GetAllForPosting(CancellationToken cancellation,
+        int postingId)
     {
         return await applications.GetByPostingId(cancellation, postingId);
     }
@@ -27,11 +32,8 @@ public class JobApplicationsService(IJobApplicationsRepository applications) : I
     public async Task<JobApplicationGetDto> GetById(CancellationToken cancellation, int applicationId)
     {
         var application = await applications.GetById(cancellation, applicationId);
-        
-        if (application == null)
-        {
-            throw new NotFound();
-        }
+
+        if (application == null) throw new NotFound();
 
         return application;
     }
@@ -45,10 +47,7 @@ public class JobApplicationsService(IJobApplicationsRepository applications) : I
     {
         var record = await applications.ChangeStatus(cancellation, applicationId, ApplicationStatus.REJECTED);
 
-        if (record == null)
-        {
-            throw new NotFound();
-        }
+        if (record == null) throw new NotFound();
 
         return record;
     }
@@ -57,35 +56,27 @@ public class JobApplicationsService(IJobApplicationsRepository applications) : I
     {
         var record = await applications.ChangeStatus(cancellation, applicationId, ApplicationStatus.ACCEPTED);
 
-        if (record == null)
-        {
-            throw new NotFound();
-        }
+        if (record == null) throw new NotFound();
 
         return record;
     }
 
-    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
+    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingPlanDto plannedMeeting)
     {
-        var record = applications.GetMeeting(cancellation, id, plannedMeeting.RecruitmentStageId);
-        if (record != null)
-        {
-            throw new BadRequest("Meeting of this type has already taken place");
-        }
-        
-       return await applications.PlanMeeting(cancellation, id, plannedMeeting);
+        var record = await applications.GetMeeting(cancellation, id, plannedMeeting.RecruitmentStageId);
+        if (record != null) throw new BadRequest("Meeting of this type has already taken place");
+
+        return await applications.PlanMeeting(cancellation, id, plannedMeeting);
     }
 
-    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog)
+    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingLogDto meetingLog)
     {
-        var record =  await applications.LogMeeting(cancellation, id, meetingLog);
-        
-        if (record == null)
-        {
-            throw new NotFound();
-        }
-        
-        
+        var record = await applications.LogMeeting(cancellation, id, meetingLog);
+
+        if (record == null) throw new NotFound();
+
 
         return record;
     }

@@ -1,40 +1,37 @@
 using System.ComponentModel.DataAnnotations;
+using ezhire_api.Validators;
 
 namespace ezhire_api.DTO;
 
 public class ApplicationMeetingPlanDto
 {
-   [Required]
-   public DateOnly Date { get; set; }
+    [Required]
+    [NotInPast]
+    public DateOnly Date { get; set; }
 
-   [Required]
-   public int RecruitmentStageId { get; set; }
-   
-   [Required]
-   public int ApplicationId { get; set; }
+    [Required] [Range(1, int.MaxValue)] public int RecruitmentStageId { get; set; }
+
+    [Required] [Range(1, int.MaxValue)] public int ApplicationId { get; set; }
 }
 
 public class ApplicationMeetingLogDto
 {
-   [Required]
-   public int MeetingId { get; set; }
-   
-   [Required]
-   public int Grade { get; set; }
+    [Required] [Range(1, int.MaxValue)] public int MeetingId { get; set; }
 
-   [Required] [MaxLength(500)] public string Comment { get; set; } = null!;
+    [Required] [Range(1, 5)] public int Grade { get; set; }
+
+    [Required] public string Comment { get; set; } = null!;
 }
 
 public class RecruitmentStageMeetingGetDto : BaseResponseDto
 {
-   [Required]
-   public DateOnly Date { get; set; }
+    [Required] public DateOnly Date { get; set; }
 
-   public int? Grade { get; set; }
-   
-   public string? Comment { get; set; }
+    public int? Grade { get; set; }
 
-   public RecruitmentStageGetDto Stage { get; set; } = null!;
-   
-   public JobApplicationGetDto Application { get; set; } = null!;
+    public string? Comment { get; set; }
+
+    [Required] public RecruitmentStageGetDto Stage { get; set; } = null!;
+
+    [Required] public JobApplicationGetDto Application { get; set; } = null!;
 }

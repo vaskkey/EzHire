@@ -31,6 +31,6 @@ public class JobApplication : BaseEntity
     [ForeignKey(nameof(PostingId))] public virtual JobPosting Posting { get; set; } = null!;
 
     [ForeignKey(nameof(ApplicantId))] public virtual Candidate Applicant { get; set; } = null!;
-    
+
     public virtual ICollection<RecruitmentStageMeeting> Meetings { get; set; }
 }

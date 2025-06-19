@@ -12,7 +12,7 @@ public class JobApplicationCreateDto
     public ApplicationStatus Status { get; set; }
 
 
-    [Required] public int PostingId { get; set; }
+    [Required] [Range(1, int.MaxValue)] public int PostingId { get; set; }
 
     [Required] public int ApplicantId { get; set; }
 }

@@ -6,11 +6,10 @@ namespace ezhire_api.Models;
 [Table("offer")]
 public class Offer : BaseEntity
 {
-   [Required] [Column("date_extended")] public DateTime DateExtended { get; set; }
-   [Required] [Column("accepted")] public bool Accepted { get; set; }
+    [Required] [Column("date_extended")] public DateTime DateExtended { get; set; }
+    [Required] [Column("accepted")] public bool Accepted { get; set; }
 
-   [Column("candidate_id")]
-   public int CandidateId { get; set; }
+    [Column("candidate_id")] public int CandidateId { get; set; }
 
-   public virtual Candidate Candidate { get; set; } = null!;
+    public virtual Candidate Candidate { get; set; } = null!;
 }

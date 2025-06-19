@@ -18,8 +18,12 @@ public interface IJobApplicationsRepository
     Task<ICollection<PostingApplicationDto>> GetByPostingId(CancellationToken cancellation, int postingId);
     Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId, int stageId);
     Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int meetingId);
-    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting);
-    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog);
+
+    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingPlanDto plannedMeeting);
+
+    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingLogDto meetingLog);
 }
 
 public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRepository stages)
@@ -122,10 +126,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
             .Where(application => application.Id == applicationId)
             .FirstOrDefaultAsync(cancellation);
 
-        if (application == null)
-        {
-            return null;
-        }
+        if (application == null) return null;
 
         data.JobApplications.Update(application);
 
@@ -213,7 +214,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
                     DateApplied = meeting.Application.DateApplied,
                     Status = meeting.Application.Status,
                     PostingId = meeting.Application.PostingId,
-                    ApplicantId = meeting.Application.ApplicantId,
+                    ApplicantId = meeting.Application.ApplicantId
                 }
             })
             .FirstOrDefaultAsync(cancellation);
@@ -240,19 +241,20 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
                     DateApplied = meeting.Application.DateApplied,
                     Status = meeting.Application.Status,
                     PostingId = meeting.Application.PostingId,
-                    ApplicantId = meeting.Application.ApplicantId,
+                    ApplicantId = meeting.Application.ApplicantId
                 }
             })
             .FirstOrDefaultAsync(cancellation);
     }
 
-    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id, ApplicationMeetingPlanDto plannedMeeting)
+    public async Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingPlanDto plannedMeeting)
     {
         await data.RecruitmentStageMeetings.AddAsync(new RecruitmentStageMeeting
         {
             Date = plannedMeeting.Date,
             ApplicationId = plannedMeeting.ApplicationId,
-            RecruitmentStageId = plannedMeeting.RecruitmentStageId,
+            RecruitmentStageId = plannedMeeting.RecruitmentStageId
         }, cancellation);
 
         await data.SaveChangesAsync(cancellation);
@@ -260,15 +262,13 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
         return await GetMeeting(cancellation, plannedMeeting.ApplicationId, plannedMeeting.RecruitmentStageId);
     }
 
-    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id, ApplicationMeetingLogDto meetingLog)
+    public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
+        ApplicationMeetingLogDto meetingLog)
     {
         var meeting = await data.RecruitmentStageMeetings
             .FirstOrDefaultAsync(meeting => meeting.Id == meetingLog.MeetingId);
 
-        if (meeting == null)
-        {
-            return null;
-        }
+        if (meeting == null) return null;
 
         data.RecruitmentStageMeetings.Update(meeting);
 
