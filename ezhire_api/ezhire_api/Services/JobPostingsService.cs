@@ -53,7 +53,7 @@ public class JobPostingsService(
     {
         var application = await jobApplications.GetByEmail(cancellation, candidateApplication.Email, id);
         if (application != null)
-            throw new UnprocessibleEntity(
+            throw new UnprocessableEntity(
                 $"Application for this posting already exists for email {candidateApplication.Email}");
 
 

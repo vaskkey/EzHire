@@ -1,4 +1,5 @@
 using ezhire_api.DAL;
+using ezhire_api.Middlewares;
 using ezhire_api.Repositories;
 using ezhire_api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,8 @@ app.UseHttpsRedirection();
 app.UseCors("AllowCORS");
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
