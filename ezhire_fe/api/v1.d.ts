@@ -33,7 +33,11 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "text/plain": components["schemas"]["UserGetDto"];
+                        "application/json": components["schemas"]["UserGetDto"];
+                        "text/json": components["schemas"]["UserGetDto"];
+                    };
                 };
             };
         };
@@ -72,10 +76,51 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "text/plain": components["schemas"]["UserGetDto"];
+                        "application/json": components["schemas"]["UserGetDto"];
+                        "text/json": components["schemas"]["UserGetDto"];
+                    };
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UserGetDto"];
+                        "application/json": components["schemas"]["UserGetDto"];
+                        "text/json": components["schemas"]["UserGetDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -677,6 +722,17 @@ export interface paths {
                         "text/json": components["schemas"]["RecruitmentCampaignGetDto"];
                     };
                 };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
             };
         };
         delete?: never;
@@ -712,17 +768,6 @@ export interface paths {
                         "text/plain": components["schemas"]["RecruitmentCampaignGetDto"];
                         "application/json": components["schemas"]["RecruitmentCampaignGetDto"];
                         "text/json": components["schemas"]["RecruitmentCampaignGetDto"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
                     };
                 };
                 /** @description Not Found */
@@ -1145,6 +1190,13 @@ export interface components {
             userType: components["schemas"]["UserType"];
             type?: components["schemas"]["RecruiterType"];
             department?: string | null;
+        };
+        UserGetDto: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            userType: components["schemas"]["UserType"];
         };
         UserLoginDto: {
             email: string;

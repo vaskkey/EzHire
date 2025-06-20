@@ -11,6 +11,7 @@ public class AuthController(IAuthService auth) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(typeof(UserGetDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Login(CancellationToken cancellation, [FromBody] UserLoginDto userData)
     {
         await auth.Login(cancellation, userData);
@@ -19,6 +20,7 @@ public class AuthController(IAuthService auth) : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("register")]
+    [ProducesResponseType(typeof(UserGetDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Register(CancellationToken cancellation, [FromBody] UserCreateDto userData)
     {
         return Ok(await auth.Register(cancellation, userData));
@@ -26,6 +28,7 @@ public class AuthController(IAuthService auth) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
+    [ProducesResponseType(typeof(UserGetDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMe(CancellationToken cancellation)
     {
         return Ok(await auth.GetUser(cancellation, User.Identity));

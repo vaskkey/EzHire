@@ -1,13 +1,8 @@
-import { type CampaignObject } from "@/api/client";
+import { CampaignPriority, type CampaignObject } from "@/api/client";
+import Link from "next/link";
 
 interface Props {
 	campaigns: CampaignObject[];
-}
-
-export enum CampaignPriority {
-	LOW = 0,
-	MEDIUM = 1,
-	HIGH = 2,
 }
 
 export default function CampaignsTable({ campaigns }: Props) {
@@ -33,7 +28,9 @@ export default function CampaignsTable({ campaigns }: Props) {
 			<tbody>
 				{campaigns.map((campaign) => (
 					<tr key={campaign.id}>
-						<td>{campaign.name}</td>
+						<td>
+							<Link href={`/campaigns/${campaign.id}/postings`}>{campaign.name}</Link>
+						</td>
 						<td>{getPriority(campaign.priority)}</td>
 					</tr>
 				))}

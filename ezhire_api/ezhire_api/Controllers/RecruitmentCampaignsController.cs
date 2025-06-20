@@ -23,7 +23,6 @@ public class RecruitmentCampaignsController(
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(RecruitmentCampaignGetDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCampaign(CancellationToken cancellation, [FromRoute] int id)
     {
@@ -32,6 +31,7 @@ public class RecruitmentCampaignsController(
 
     [HttpPost]
     [ProducesResponseType(typeof(RecruitmentCampaignGetDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCampaign(CancellationToken cancellation,
         [FromBody] RecruitmentCampaignCreateDto campaign)
     {
