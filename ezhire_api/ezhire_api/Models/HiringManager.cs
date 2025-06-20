@@ -9,4 +9,6 @@ public class HiringManager : User
     [Required]
     [MaxLength(150)]
     public string Department { get; set; } = null!;
+
+    [Required] public virtual ICollection<RecruitmentCampaign> CreatedCampaigns { get; set; } = null!;
 }
