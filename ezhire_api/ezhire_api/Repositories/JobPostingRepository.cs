@@ -54,6 +54,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
     public async Task<JobPostingGetDto?> GetById(CancellationToken cancellation, int postingId)
     {
         return await data.JobPostings
+            .Include(posting => posting.Campaign)
             .Where(post => post.Id == postingId)
             .Select(post => new JobPostingGetDto
             {

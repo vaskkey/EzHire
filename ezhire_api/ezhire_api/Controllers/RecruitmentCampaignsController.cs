@@ -1,9 +1,11 @@
 using ezhire_api.DTO;
 using ezhire_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ezhire_api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/campaigns")]
 public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings)
@@ -43,6 +45,6 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     {
         var campaign = await campaigns.GetById(cancellation, id);
         var response = await postings.AddPosting(cancellation, campaign.Id, postingData);
-        return CreatedAtRoute(nameof(JobPostingsController), new { id = response.Id }, response);
+        return Created($"/api/postings/{response.Id}", response);
     }
 }

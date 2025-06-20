@@ -15,7 +15,7 @@ public class JobPostingCreateDto : CampaignPostingCreateDto
 {
     [Required] public DateTime DatePosted { get; set; }
 
-    [Required] [Range(1, int.MaxValue)] public int CampaignId { get; set; }
+    public int CampaignId { get; set; }
 
     [Required]
     [EnumDataType(typeof(PostingStatus))]

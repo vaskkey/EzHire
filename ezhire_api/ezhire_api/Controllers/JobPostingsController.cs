@@ -1,9 +1,11 @@
 using ezhire_api.DTO;
 using ezhire_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ezhire_api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/postings")]
 public class JobPostingsController(IJobPostingsService postings, IRecruitmentStagesService stages) : ControllerBase
@@ -15,6 +17,7 @@ public class JobPostingsController(IJobPostingsService postings, IRecruitmentSta
         return Ok(await postings.GetAllForId(cancellation, campaignId));
     }
 
+    [AllowAnonymous]
     [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [HttpGet("{id:int}")]
@@ -23,6 +26,7 @@ public class JobPostingsController(IJobPostingsService postings, IRecruitmentSta
         return Ok(await postings.GetById(cancellation, id));
     }
 
+    [AllowAnonymous]
     [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [HttpPost("{id:int}")]

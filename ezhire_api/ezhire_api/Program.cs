@@ -28,7 +28,7 @@ builder.Services.AddDbContext<EzHireContext>(opt =>
 
 // AUTH
 // In Program.cs or Startup.cs
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
     {
         // Password settings
         options.Password.RequireDigit = true;
@@ -79,9 +79,7 @@ builder.Services.AddScoped<IRecruitmentStagesService, RecruitmentStagesService>(
 builder.Services.AddScoped<IRecruitmentStagesRepository, RecruitmentStagesRepository>();
 
 // AUTH Services
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<EzHireContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 

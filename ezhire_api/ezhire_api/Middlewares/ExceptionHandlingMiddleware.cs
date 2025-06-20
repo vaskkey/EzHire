@@ -31,6 +31,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         var result = JsonSerializer.Serialize(new { error = message });
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
+
+        if (statusCode == HttpStatusCode.InternalServerError)
+        {
+            Console.Error.WriteLine(ex);
+        }
+        
         return context.Response.WriteAsync(result);
     }
 }

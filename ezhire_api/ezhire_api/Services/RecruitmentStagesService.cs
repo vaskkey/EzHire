@@ -11,7 +11,7 @@ public interface IRecruitmentStagesService
     Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage);
 }
 
-public class RecruitmentStagesService(IRecruitmentStagesRepository stages) : IRecruitmentStagesService
+public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobPostingRepository postings) : IRecruitmentStagesService
 {
     public async Task<ICollection<RecruitmentStageGetDto>> GetAllForId(CancellationToken cancellation, int postingId)
     {
@@ -29,6 +29,13 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages) : IRe
     public async Task<RecruitmentStageGetDto> Create(CancellationToken cancellation,
         GenericRecruitmentStageCreateDto stage)
     {
+        var posting = await  postings.GetById(cancellation, stage.PostingId);
+
+        if (posting == null)
+        {
+            throw new NotFound("Posting not found");
+        }
+        
         if (stage.TechnologyName != null)
             return await stages.Create(cancellation, new TechnicalMeetingCreateDto
             {

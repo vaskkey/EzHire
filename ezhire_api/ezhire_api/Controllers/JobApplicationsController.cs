@@ -1,9 +1,11 @@
 using ezhire_api.DTO;
 using ezhire_api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ezhire_api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/applications")]
 public class JobApplicationsController(IJobApplicationsService applications) : ControllerBase
