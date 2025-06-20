@@ -54,15 +54,9 @@ public class JobPostingsService(
     {
         var posting = await jobPosting.GetById(cancellation, id);
 
-        if (posting == null)
-        {
-            throw new NotFound();
-        }
+        if (posting == null) throw new NotFound();
 
-        if (posting.Status == PostingStatus.CLOSED)
-        {
-            throw new BadRequest("Posting is in invalid state");
-        }
+        if (posting.Status == PostingStatus.CLOSED) throw new BadRequest("Posting is in invalid state");
 
         var application = await jobApplications.GetByEmail(cancellation, candidateApplication.Email, posting.Id);
         if (application != null)

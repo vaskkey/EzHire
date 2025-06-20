@@ -8,7 +8,10 @@ namespace ezhire_api.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/campaigns")]
-public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings, IAuthService auth)
+public class RecruitmentCampaignsController(
+    IRecruitmentCampaignsService campaigns,
+    IJobPostingsService postings,
+    IAuthService auth)
     : ControllerBase
 {
     [HttpGet]
@@ -34,7 +37,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     {
         var user = await auth.GetUser(cancellation, User.Identity);
         auth.ValidateRole(user, UserType.HIRING_MANAGER);
-        
+
         var response = await campaigns.Create(cancellation, campaign, user);
         return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }

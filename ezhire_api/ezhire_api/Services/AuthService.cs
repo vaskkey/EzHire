@@ -21,45 +21,40 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
 {
     public async Task<UserGetDto> Register(CancellationToken cancellation, UserCreateDto userData)
     {
-            User? user = userData.UserType switch
+        User? user = userData.UserType switch
+        {
+            UserType.HIRING_MANAGER => new HiringManager
             {
-                UserType.HIRING_MANAGER => new HiringManager
-                {
-                    UserName = userData.Email,
-                    Email = userData.Email,
-                    FirstName = userData.FirstName,
-                    LastName = userData.LastName,
-                    Department = userData.Department
-                },
-                UserType.RECRUITER => new Recruiter
-                {
-                    UserName = userData.Email,
-                    Email = userData.Email,
-                    FirstName = userData.FirstName,
-                    LastName = userData.LastName,
-                    Type = userData.Type
-                },
-                _ => null
+                UserName = userData.Email,
+                Email = userData.Email,
+                FirstName = userData.FirstName,
+                LastName = userData.LastName,
+                Department = userData.Department
+            },
+            UserType.RECRUITER => new Recruiter
+            {
+                UserName = userData.Email,
+                Email = userData.Email,
+                FirstName = userData.FirstName,
+                LastName = userData.LastName,
+                Type = userData.Type
+            },
+            _ => null
+        };
+
+        if (user == null) throw new BadRequest("Invalid user type");
+
+        var result = await userManager.CreateAsync(user, userData.Password);
+
+        if (result.Succeeded)
+            return new UserGetDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
             };
 
-            if (user == null)
-            {
-                throw new BadRequest("Invalid user type");
-            }
-            
-            var result = await userManager.CreateAsync(user, userData.Password);
-
-            if (result.Succeeded)
-            {
-                return new UserGetDto
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                };
-            }
-
-            throw new BadRequest(result.Errors.First().Description);
+        throw new BadRequest(result.Errors.First().Description);
     }
 
     public async Task Login(CancellationToken cancellation, UserLoginDto userData)
@@ -68,15 +63,12 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
             userData.Email,
             userData.Password,
             false, // Remember me.
-            lockoutOnFailure: true);
-        
+            true);
+
         if (result.Succeeded) return;
-        
-        if (result.IsLockedOut)
-        {
-            throw new BadRequest("Account locked out");
-        }
-        
+
+        if (result.IsLockedOut) throw new BadRequest("Account locked out");
+
         throw new BadRequest("Invalid login attempt");
     }
 
@@ -84,7 +76,7 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
     {
         return await users.GetUserByEmail(cancellation, userIdentity?.Name);
     }
-    
+
     public async Task ValidateRole(CancellationToken cancellation, IIdentity? userIdentity, UserType validType)
     {
         var user = await users.GetUserByEmail(cancellation, userIdentity?.Name);
@@ -94,9 +86,6 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
 
     public void ValidateRole(UserGetDto? user, UserType validType)
     {
-        if (user?.UserType != validType)
-        {
-            throw new BadRequest("Invalid permissions");
-        }
+        if (user?.UserType != validType) throw new BadRequest("Invalid permissions");
     }
 }

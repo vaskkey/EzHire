@@ -14,7 +14,6 @@ public class TeamMeetingCreateDto : MeetingBase
 
 public class CultureMeetingCreateDto : MeetingBase
 {
-
     [Required] [MinLength(1)] public ICollection<string> Values { get; set; }
 }
 
@@ -35,6 +34,6 @@ public abstract class MeetingBase
     [Required] public string Description { get; set; } = null!;
 
     [Required] [Range(1, int.MaxValue)] public int PostingId { get; set; }
-    
+
     public string RecruiterId { get; set; }
 }

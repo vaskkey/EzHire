@@ -8,10 +8,13 @@ public interface IRecruitmentStagesService
 {
     Task<ICollection<RecruitmentStageGetDto>> GetAllForId(CancellationToken cancellation, int postingId);
     Task<RecruitmentStageGetDto> GetById(CancellationToken cancellation, int stageId);
-    Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage, UserGetDto user);
+
+    Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage,
+        UserGetDto user);
 }
 
-public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobPostingRepository postings) : IRecruitmentStagesService
+public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobPostingRepository postings)
+    : IRecruitmentStagesService
 {
     public async Task<ICollection<RecruitmentStageGetDto>> GetAllForId(CancellationToken cancellation, int postingId)
     {
@@ -26,15 +29,13 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobP
         return stage;
     }
 
-    public async Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage, UserGetDto user)
+    public async Task<RecruitmentStageGetDto> Create(CancellationToken cancellation,
+        GenericRecruitmentStageCreateDto stage, UserGetDto user)
     {
-        var posting = await  postings.GetById(cancellation, stage.PostingId);
+        var posting = await postings.GetById(cancellation, stage.PostingId);
 
-        if (posting == null)
-        {
-            throw new NotFound("Posting not found");
-        }
-        
+        if (posting == null) throw new NotFound("Posting not found");
+
         if (stage.TechnologyName != null)
             return await stages.Create(cancellation, new TechnicalMeetingCreateDto
             {

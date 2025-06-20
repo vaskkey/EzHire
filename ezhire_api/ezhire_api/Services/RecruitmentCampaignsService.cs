@@ -30,7 +30,8 @@ public class RecruitmentCampaignsService(IRecruitmentCampaignsRepository campaig
         return campaign;
     }
 
-    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign, UserGetDto user)
+    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign,
+        UserGetDto user)
     {
         return campaigns.Create(cancellation, campaign, user);
     }

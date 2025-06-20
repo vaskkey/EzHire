@@ -32,7 +32,7 @@ public class RecruitmentStagesController(IRecruitmentStagesService stages, IAuth
     {
         var user = await auth.GetUser(cancellation, User.Identity);
         auth.ValidateRole(user, UserType.RECRUITER);
-        
+
         return Ok(await stages.Create(cancellation, stage, user));
     }
 }

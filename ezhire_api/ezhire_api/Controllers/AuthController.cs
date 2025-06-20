@@ -23,7 +23,7 @@ public class AuthController(IAuthService auth) : ControllerBase
     {
         return Ok(await auth.Register(cancellation, userData));
     }
-    
+
     [Authorize]
     [HttpGet("me")]
     public async Task<IActionResult> GetMe(CancellationToken cancellation)

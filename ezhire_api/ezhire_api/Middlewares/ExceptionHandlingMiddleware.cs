@@ -32,11 +32,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
-        if (statusCode == HttpStatusCode.InternalServerError)
-        {
-            Console.Error.WriteLine(ex);
-        }
-        
+        if (statusCode == HttpStatusCode.InternalServerError) Console.Error.WriteLine(ex);
+
         return context.Response.WriteAsync(result);
     }
 }

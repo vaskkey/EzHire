@@ -18,8 +18,8 @@ public class EzHireContext : IdentityDbContext<IdentityUser>
     public DbSet<CultureMeeting> CultureMeetings { get; set; }
     public DbSet<RecruitmentStageMeeting> RecruitmentStageMeetings { get; set; }
     public DbSet<Offer> Offers { get; set; }
-    
-    
+
+
     public DbSet<User> Users { get; set; }
     public DbSet<HiringManager> HiringManagers { get; set; }
     public DbSet<Recruiter> Recruiters { get; set; }

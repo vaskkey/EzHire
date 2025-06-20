@@ -14,27 +14,21 @@ public class RecruiterGetDto : UserGetDto
 
 public class HiringManagerGetDto : UserGetDto
 {
-    [Required]
-    [MaxLength(150)]
-    public string Department { get; set; } = null!;
-    
+    [Required] [MaxLength(150)] public string Department { get; set; } = null!;
+
     public override UserType UserType => UserType.HIRING_MANAGER;
 }
 
 public class UserGetDto
 {
-    [Required]
-    public string Id { get; set; } = null!;
-    
-    [Required]
-    public string FirstName { get; set; } = null!;
+    [Required] public string Id { get; set; } = null!;
 
-    [Required]
-    public string LastName { get; set; } = null!;
-    
-    [Required]
-    public string Email { get; set; } = null!;
-    
+    [Required] public string FirstName { get; set; } = null!;
+
+    [Required] public string LastName { get; set; } = null!;
+
+    [Required] public string Email { get; set; } = null!;
+
     [Required]
     [EnumDataType(typeof(UserType))]
     public virtual UserType UserType { get; set; }

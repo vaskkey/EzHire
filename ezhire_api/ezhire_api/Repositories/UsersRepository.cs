@@ -14,17 +14,11 @@ public class UsersRepository(EzHireContext data) : IUsersRepository
 {
     public async Task<UserGetDto?> GetUserByEmail(CancellationToken cancellation, string? email)
     {
-        if (email == null)
-        {
-            return null;
-        }
+        if (email == null) return null;
 
         var record = await data.Users.FirstOrDefaultAsync(user => user.Email == email, cancellation);
 
-        if (record == null)
-        {
-            return null;
-        }
+        if (record == null) return null;
 
         return GetUserDto(record);
     }
@@ -32,7 +26,6 @@ public class UsersRepository(EzHireContext data) : IUsersRepository
     private UserGetDto GetUserDto(User record)
     {
         if (record is Recruiter recruiter)
-        {
             return new RecruiterGetDto
             {
                 Id = recruiter.Id,
@@ -41,10 +34,8 @@ public class UsersRepository(EzHireContext data) : IUsersRepository
                 Email = recruiter.Email,
                 Type = recruiter.Type
             };
-        }
 
         if (record is HiringManager manager)
-        {
             return new HiringManagerGetDto
             {
                 Id = manager.Id,
@@ -53,8 +44,7 @@ public class UsersRepository(EzHireContext data) : IUsersRepository
                 Email = manager.Email,
                 Department = manager.Department
             };
-        }
-        
+
         throw new Exception("Unknown user type");
     }
 }
