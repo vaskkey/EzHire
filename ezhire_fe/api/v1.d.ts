@@ -4,6 +4,84 @@
  */
 
 export interface paths {
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserLoginDto"];
+                    "text/json": components["schemas"]["UserLoginDto"];
+                    "application/*+json": components["schemas"]["UserLoginDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserCreateDto"];
+                    "text/json": components["schemas"]["UserCreateDto"];
+                    "application/*+json": components["schemas"]["UserCreateDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Candidates": {
         parameters: {
             query?: never;
@@ -458,9 +536,70 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["JobApplicationGetDto"];
-                        "application/json": components["schemas"]["JobApplicationGetDto"];
-                        "text/json": components["schemas"]["JobApplicationGetDto"];
+                        "text/plain": components["schemas"]["JobPostingGetDto"];
+                        "application/json": components["schemas"]["JobPostingGetDto"];
+                        "text/json": components["schemas"]["JobPostingGetDto"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/postings/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["JobPostingGetDto"];
+                        "application/json": components["schemas"]["JobPostingGetDto"];
+                        "text/json": components["schemas"]["JobPostingGetDto"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
                     };
                 };
                 /** @description Not Found */
@@ -888,12 +1027,13 @@ export interface components {
             updatedAt: string;
         };
         GenericRecruitmentStageCreateDto: {
-            description: string;
-            /** Format: int32 */
-            postingId: number;
             technologyName?: string | null;
             teamName?: string | null;
             values?: string[];
+            description: string;
+            /** Format: int32 */
+            postingId: number;
+            recruiterId?: string;
         };
         JobApplicationGetDto: {
             /** Format: date-time */
@@ -916,7 +1056,7 @@ export interface components {
             /** Format: date-time */
             datePosted: string;
             /** Format: int32 */
-            campaignId: number;
+            campaignId?: number;
             status: components["schemas"]["PostingStatus"];
             jobName: string;
             description: string;
@@ -956,6 +1096,7 @@ export interface components {
             detail?: string | null;
             instance?: string | null;
         };
+        RecruiterType: number;
         RecruitmentCampaignCreateDto: {
             name: string;
             priority: components["schemas"]["CampaignPriority"];
@@ -996,6 +1137,20 @@ export interface components {
             /** Format: date-time */
             updatedAt: string;
         };
+        UserCreateDto: {
+            firstName: string;
+            lastName: string;
+            password: string;
+            email: string;
+            userType: components["schemas"]["UserType"];
+            type?: components["schemas"]["RecruiterType"];
+            department?: string | null;
+        };
+        UserLoginDto: {
+            email: string;
+            password: string;
+        };
+        UserType: number;
     };
     responses: never;
     parameters: never;
