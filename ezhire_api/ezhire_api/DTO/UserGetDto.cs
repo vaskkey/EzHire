@@ -9,7 +9,7 @@ public class RecruiterGetDto : UserGetDto
     [EnumDataType(typeof(RecruiterType))]
     public RecruiterType Type { get; set; }
 
-    public virtual UserType UserType { get; set; } = UserType.RECRUITER;
+    public override UserType UserType => UserType.RECRUITER;
 }
 
 public class HiringManagerGetDto : UserGetDto
@@ -18,7 +18,7 @@ public class HiringManagerGetDto : UserGetDto
     [MaxLength(150)]
     public string Department { get; set; } = null!;
     
-    public virtual UserType UserType { get; set; } = UserType.HIRING_MANAGER;
+    public override UserType UserType => UserType.HIRING_MANAGER;
 }
 
 public class UserGetDto

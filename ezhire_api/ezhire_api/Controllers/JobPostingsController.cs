@@ -8,7 +8,7 @@ namespace ezhire_api.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/postings")]
-public class JobPostingsController(IJobPostingsService postings, IRecruitmentStagesService stages) : ControllerBase
+public class JobPostingsController(IJobPostingsService postings, IAuthService auth) : ControllerBase
 {
     [ProducesResponseType(typeof(ICollection<CampaignPostingGetDto>), StatusCodes.Status200OK)]
     [HttpGet]
@@ -44,6 +44,7 @@ public class JobPostingsController(IJobPostingsService postings, IRecruitmentSta
     public async Task<IActionResult> ClosePosting(CancellationToken cancellation,
         [FromRoute] int id)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.HIRING_MANAGER);
         return Ok(await postings.Close(cancellation, id));
     }
 }

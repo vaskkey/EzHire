@@ -15,7 +15,6 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     [ProducesResponseType(typeof(ICollection<RecruitmentCampaignGetDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllCampaigns(CancellationToken cancellation)
     {
-        Console.Out.WriteLine(await auth.GetUser(cancellation, User.Identity));
         return Ok(await campaigns.GetAll(cancellation));
     }
 
@@ -33,7 +32,10 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     public async Task<IActionResult> CreateCampaign(CancellationToken cancellation,
         [FromBody] RecruitmentCampaignCreateDto campaign)
     {
-        var response = await campaigns.Create(cancellation, campaign);
+        var user = await auth.GetUser(cancellation, User.Identity);
+        auth.ValidateRole(user, UserType.HIRING_MANAGER);
+        
+        var response = await campaigns.Create(cancellation, campaign, user);
         return CreatedAtAction(nameof(GetCampaign), new { id = response.Id }, response);
     }
 
@@ -44,6 +46,7 @@ public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaig
     public async Task<IActionResult> AddPosting(CancellationToken cancellation, [FromRoute] int id,
         [FromBody] JobPostingCreateDto postingData)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.HIRING_MANAGER);
         var campaign = await campaigns.GetById(cancellation, id);
         var response = await postings.AddPosting(cancellation, campaign.Id, postingData);
         return Created($"/api/postings/{response.Id}", response);

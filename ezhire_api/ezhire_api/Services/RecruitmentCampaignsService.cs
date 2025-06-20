@@ -11,7 +11,7 @@ public interface IRecruitmentCampaignsService
     public Task<RecruitmentCampaignGetDto> GetById(CancellationToken cancellation, int id);
 
     public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
-        RecruitmentCampaignCreateDto campaign);
+        RecruitmentCampaignCreateDto campaign, UserGetDto createdBy);
 }
 
 public class RecruitmentCampaignsService(IRecruitmentCampaignsRepository campaigns) : IRecruitmentCampaignsService
@@ -30,8 +30,8 @@ public class RecruitmentCampaignsService(IRecruitmentCampaignsRepository campaig
         return campaign;
     }
 
-    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign)
+    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign, UserGetDto user)
     {
-        return campaigns.Create(cancellation, campaign);
+        return campaigns.Create(cancellation, campaign, user);
     }
 }

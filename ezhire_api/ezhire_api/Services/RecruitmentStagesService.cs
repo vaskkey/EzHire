@@ -8,7 +8,7 @@ public interface IRecruitmentStagesService
 {
     Task<ICollection<RecruitmentStageGetDto>> GetAllForId(CancellationToken cancellation, int postingId);
     Task<RecruitmentStageGetDto> GetById(CancellationToken cancellation, int stageId);
-    Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage);
+    Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage, UserGetDto user);
 }
 
 public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobPostingRepository postings) : IRecruitmentStagesService
@@ -26,8 +26,7 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobP
         return stage;
     }
 
-    public async Task<RecruitmentStageGetDto> Create(CancellationToken cancellation,
-        GenericRecruitmentStageCreateDto stage)
+    public async Task<RecruitmentStageGetDto> Create(CancellationToken cancellation, GenericRecruitmentStageCreateDto stage, UserGetDto user)
     {
         var posting = await  postings.GetById(cancellation, stage.PostingId);
 
@@ -41,7 +40,8 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobP
             {
                 Description = stage.Description,
                 PostingId = stage.PostingId,
-                TechnologyName = stage.TechnologyName
+                TechnologyName = stage.TechnologyName,
+                RecruiterId = user.Id
             });
 
         if (stage.TeamName != null)
@@ -49,7 +49,8 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobP
             {
                 Description = stage.Description,
                 PostingId = stage.PostingId,
-                TeamName = stage.TeamName
+                TeamName = stage.TeamName,
+                RecruiterId = user.Id
             });
 
         if (stage.Values != null)
@@ -57,7 +58,8 @@ public class RecruitmentStagesService(IRecruitmentStagesRepository stages, IJobP
             {
                 Description = stage.Description,
                 PostingId = stage.PostingId,
-                Values = stage.Values
+                Values = stage.Values,
+                RecruiterId = user.Id
             });
 
         throw new BadRequest("Invalid meeting type");

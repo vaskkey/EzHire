@@ -11,8 +11,7 @@ public interface IRecruitmentCampaignsRepository
     public Task<ICollection<RecruitmentCampaignGetDto>> GetAll(CancellationToken cancellation);
     public Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id);
 
-    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
-        RecruitmentCampaignCreateDto campaign);
+    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign, UserGetDto user);
 }
 
 public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCampaignsRepository
@@ -57,13 +56,13 @@ public class RecruitmentCampaignsRepository(EzHireContext data) : IRecruitmentCa
         return campaign;
     }
 
-    public async Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation,
-        RecruitmentCampaignCreateDto campaign)
+    public async Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign, UserGetDto user)
     {
         var entry = await data.Campaigns.AddAsync(new RecruitmentCampaign
             {
                 Name = campaign.Name,
-                Priority = campaign.Priority
+                Priority = campaign.Priority,
+                ManagerId = user.Id
             },
             cancellation);
 

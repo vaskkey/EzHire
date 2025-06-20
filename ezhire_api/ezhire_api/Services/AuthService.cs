@@ -12,6 +12,8 @@ public interface IAuthService
     Task<UserGetDto> Register(CancellationToken cancellation, UserCreateDto userData);
     Task Login(CancellationToken cancellation, UserLoginDto userData);
     Task<UserGetDto> GetUser(CancellationToken cancellation, IIdentity? userIdentity);
+    Task ValidateRole(CancellationToken cancellation, IIdentity? userIdentity, UserType validType);
+    void ValidateRole(UserGetDto? user, UserType validType);
 }
 
 public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IUsersRepository users)
@@ -80,6 +82,21 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
 
     public async Task<UserGetDto> GetUser(CancellationToken cancellation, IIdentity? userIdentity)
     {
-        return await users.GetUserByEmail(cancellation, userIdentity.Name);
+        return await users.GetUserByEmail(cancellation, userIdentity?.Name);
+    }
+    
+    public async Task ValidateRole(CancellationToken cancellation, IIdentity? userIdentity, UserType validType)
+    {
+        var user = await users.GetUserByEmail(cancellation, userIdentity?.Name);
+
+        ValidateRole(user, validType);
+    }
+
+    public void ValidateRole(UserGetDto? user, UserType validType)
+    {
+        if (user?.UserType != validType)
+        {
+            throw new BadRequest("Invalid permissions");
+        }
     }
 }

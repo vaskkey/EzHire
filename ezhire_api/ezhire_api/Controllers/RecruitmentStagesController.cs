@@ -8,7 +8,7 @@ namespace ezhire_api.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/stages")]
-public class RecruitmentStagesController(IRecruitmentStagesService stages) : ControllerBase
+public class RecruitmentStagesController(IRecruitmentStagesService stages, IAuthService auth) : ControllerBase
 {
     [ProducesResponseType(typeof(ICollection<RecruitmentStageGetDto>), StatusCodes.Status200OK)]
     [HttpGet]
@@ -30,6 +30,9 @@ public class RecruitmentStagesController(IRecruitmentStagesService stages) : Con
     public async Task<IActionResult> AddStage(CancellationToken cancellation,
         [FromBody] GenericRecruitmentStageCreateDto stage)
     {
-        return Ok(await stages.Create(cancellation, stage));
+        var user = await auth.GetUser(cancellation, User.Identity);
+        auth.ValidateRole(user, UserType.RECRUITER);
+        
+        return Ok(await stages.Create(cancellation, stage, user));
     }
 }

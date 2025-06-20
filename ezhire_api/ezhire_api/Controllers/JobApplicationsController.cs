@@ -8,7 +8,7 @@ namespace ezhire_api.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/applications")]
-public class JobApplicationsController(IJobApplicationsService applications) : ControllerBase
+public class JobApplicationsController(IJobApplicationsService applications, IAuthService auth) : ControllerBase
 {
     [ProducesResponseType(typeof(ICollection<JobApplicationGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -31,6 +31,7 @@ public class JobApplicationsController(IJobApplicationsService applications) : C
     [HttpPost("{id:int}/reject")]
     public async Task<IActionResult> RejectApplication(CancellationToken cancellation, [FromRoute] int id)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.RECRUITER);
         return Ok(await applications.Reject(cancellation, id));
     }
 
@@ -39,6 +40,7 @@ public class JobApplicationsController(IJobApplicationsService applications) : C
     [HttpPost("{id:int}/accept")]
     public async Task<IActionResult> AcceptApplication(CancellationToken cancellation, [FromRoute] int id)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.RECRUITER);
         return Ok(await applications.Accept(cancellation, id));
     }
 
@@ -48,6 +50,7 @@ public class JobApplicationsController(IJobApplicationsService applications) : C
     public async Task<IActionResult> PlanMeeting(CancellationToken cancellation, [FromRoute] int id,
         [FromBody] ApplicationMeetingPlanDto plannedMeeting)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.RECRUITER);
         return Ok(await applications.PlanMeeting(cancellation, id, plannedMeeting));
     }
 
@@ -57,6 +60,7 @@ public class JobApplicationsController(IJobApplicationsService applications) : C
     public async Task<IActionResult> LogMeeting(CancellationToken cancellation, [FromRoute] int id,
         [FromBody] ApplicationMeetingLogDto log)
     {
+        await auth.ValidateRole(cancellation, User.Identity, UserType.RECRUITER);
         return Ok(await applications.LogMeeting(cancellation, id, log));
     }
 }
