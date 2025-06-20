@@ -79,6 +79,7 @@ builder.Services.AddScoped<IRecruitmentStagesService, RecruitmentStagesService>(
 builder.Services.AddScoped<IRecruitmentStagesRepository, RecruitmentStagesRepository>();
 
 // AUTH Services
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();

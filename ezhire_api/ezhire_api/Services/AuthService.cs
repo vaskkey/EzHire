@@ -1,6 +1,8 @@
+using System.Security.Principal;
 using ezhire_api.DTO;
 using ezhire_api.Exceptions;
 using ezhire_api.Models;
+using ezhire_api.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ezhire_api.Services;
@@ -9,9 +11,10 @@ public interface IAuthService
 {
     Task<UserGetDto> Register(CancellationToken cancellation, UserCreateDto userData);
     Task Login(CancellationToken cancellation, UserLoginDto userData);
+    Task<UserGetDto> GetUser(CancellationToken cancellation, IIdentity? userIdentity);
 }
 
-public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager)
+public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IUsersRepository users)
     : IAuthService
 {
     public async Task<UserGetDto> Register(CancellationToken cancellation, UserCreateDto userData)
@@ -73,5 +76,10 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
         }
         
         throw new BadRequest("Invalid login attempt");
+    }
+
+    public async Task<UserGetDto> GetUser(CancellationToken cancellation, IIdentity? userIdentity)
+    {
+        return await users.GetUserByEmail(cancellation, userIdentity.Name);
     }
 }

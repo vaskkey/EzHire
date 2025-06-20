@@ -8,13 +8,14 @@ namespace ezhire_api.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/campaigns")]
-public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings)
+public class RecruitmentCampaignsController(IRecruitmentCampaignsService campaigns, IJobPostingsService postings, IAuthService auth)
     : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(ICollection<RecruitmentCampaignGetDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllCampaigns(CancellationToken cancellation)
     {
+        Console.Out.WriteLine(await auth.GetUser(cancellation, User.Identity));
         return Ok(await campaigns.GetAll(cancellation));
     }
 
