@@ -12,8 +12,10 @@ public abstract class RecruitmentStage : BaseEntity
     public string Description { get; set; } = null!;
 
     [Column("posting_id")] public int PostingId { get; set; }
+    [Column("recruiter_id")] public string RecruiterId { get; set; }
 
     [ForeignKey(nameof(PostingId))] public virtual JobPosting Posting { get; set; } = null!;
+    [ForeignKey(nameof(RecruiterId))] public virtual Recruiter LedBy { get; set; } = null!;
 
     public virtual ICollection<RecruitmentStageMeeting> Meetings { get; set; } = null!;
 }

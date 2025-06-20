@@ -15,4 +15,6 @@ public class Recruiter : User
     [Column("type")]
     [EnumDataType(typeof(RecruiterType))]
     public RecruiterType Type { get; set; }
+
+    public virtual ICollection<RecruitmentStage> LedStages { get; set; }
 }
