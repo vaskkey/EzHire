@@ -16,4 +16,12 @@ public class CandidatesController(ICandidatesService candidates) : ControllerBas
     {
         return Ok(await candidates.GetAll(cancellation));
     }
+
+    [ProducesResponseType(typeof(OfferGetDto), StatusCodes.Status200OK)]
+    [HttpPost("{id:int}")]
+    public async Task<IActionResult> ExtendOffer(CancellationToken cancellation, [FromRoute] int id)
+    {
+        var candidate = await candidates.GetById(cancellation, id);
+        return Ok(await candidates.ExtendOffer(cancellation, candidate));
+    }
 }

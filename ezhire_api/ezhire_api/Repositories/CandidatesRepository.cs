@@ -12,6 +12,9 @@ public interface ICandidateRepository
 
     Task<Experience> CreateExperience(CancellationToken cancellation, int candidateId,
         CandidateExperienceCreateDto experience);
+
+    Task<CandidateGetDto?> GetById(CancellationToken cancellation, int id);
+    Task<OfferGetDto> CreateOffer(CancellationToken cancellation, OfferCreateDto offerCreateDto);
 }
 
 public class CandidatesRepository(EzHireContext data) : ICandidateRepository
@@ -91,5 +94,52 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
         }, cancellation);
 
         return entity.Entity;
+    }
+
+    public Task<CandidateGetDto?> GetById(CancellationToken cancellation, int id)
+    {
+        return data.Candidates
+            .Where(candidate => candidate.Id == id)
+            .Select(candidate => new CandidateGetDto
+            {
+                Id = candidate.Id,
+                CreatedAt = candidate.CreatedAt,
+                UpdatedAt = candidate.UpdatedAt,
+                FirstName = candidate.FirstName,
+                LastName = candidate.LastName,
+                Email = candidate.Email,
+                Experiences = candidate.Experiences.Select(exp => new CandidateExperienceGetDto
+                {
+                    Id = exp.Id,
+                    CreatedAt = exp.CreatedAt,
+                    UpdatedAt = exp.UpdatedAt,
+                    CompanyName = exp.CompanyName,
+                    JobName = exp.JobName,
+                    DateStarted = exp.DateStarted,
+                    DateFinished = exp.DateFinished
+                }).ToList()
+            })
+            .FirstOrDefaultAsync(cancellation);
+    }
+
+    public async Task<OfferGetDto> CreateOffer(CancellationToken cancellation, OfferCreateDto offerCreateDto)
+    {
+        var entity = await data.Offers.AddAsync(new Offer
+        {
+            DateExtended = offerCreateDto.DateExtended,
+            Accepted = offerCreateDto.Accepted,
+            CandidateId = offerCreateDto.CandidateId
+        }, cancellation);
+
+        await data.SaveChangesAsync(cancellation);
+
+        return new OfferGetDto
+        {
+            Id = entity.Entity.Id,
+            CreatedAt = entity.Entity.CreatedAt,
+            UpdatedAt = entity.Entity.UpdatedAt,
+            DateExtended = entity.Entity.DateExtended,
+            Accepted = entity.Entity.Accepted
+        };
     }
 }

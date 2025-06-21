@@ -3,7 +3,7 @@
 import { ApplicantStatus, client, JobPostingObject, PostingStatus, UserType } from "@/api/client";
 import { UserContext } from "@/app/context/auth";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 export default function Posting({ params }: { params: Promise<{ postingId: number }> }) {
 	const currentUser = useContext(UserContext);
@@ -11,6 +11,7 @@ export default function Posting({ params }: { params: Promise<{ postingId: numbe
 	const [showToast, setShowToast] = useState(false);
 	const [isLoading, setLoading] = useState(true);
 	const router = useRouter();
+	const modalRef = useRef<HTMLDialogElement>(null);
 
 	const postingStatus = new Map([
 		[PostingStatus.OPEN, "badge-success"],
@@ -41,6 +42,7 @@ export default function Posting({ params }: { params: Promise<{ postingId: numbe
 	async function closePosting() {
 		const prms = await params;
 		const { error } = await client.POST("/api/postings/{id}/close", { params: { path: { id: prms.postingId } } });
+		modalRef.current?.close();
 
 		if (error) {
 			setShowToast(true);
@@ -101,7 +103,7 @@ export default function Posting({ params }: { params: Promise<{ postingId: numbe
 							</div>
 						</div>
 						{isManager && posting?.status === PostingStatus.OPEN && (
-							<button className="btn btn-error text-white" onClick={closePosting}>
+							<button className="btn btn-error text-white" onClick={() => modalRef.current?.showModal()}>
 								Zamknij Rekrutację
 							</button>
 						)}
@@ -137,6 +139,20 @@ export default function Posting({ params }: { params: Promise<{ postingId: numbe
 							</tbody>
 						</table>
 					</div>
+					<dialog ref={modalRef} id="confirm-modal" className="modal">
+						<div className="modal-box">
+							<h3 className="font-bold text-lg">Zamknąć Rekrutację?</h3>
+							<p className="py-4">Status kandydatów, którzy nie zostali zatrudnieni, zostanie ustawiony na 'Odmowa'.</p>
+							<div className="modal-action">
+								<form method="dialog">
+									<button className="btn">Anuluj</button>
+								</form>
+								<button className="btn btn-error" type="submit" onClick={closePosting}>
+									Zamknij
+								</button>
+							</div>
+						</div>
+					</dialog>
 				</>
 			)}
 			{showToast && (

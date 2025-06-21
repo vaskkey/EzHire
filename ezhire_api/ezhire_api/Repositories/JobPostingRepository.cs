@@ -92,7 +92,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
                             UpdatedAt = application.Applicant.UpdatedAt,
                             FirstName = application.Applicant.FirstName,
                             LastName = application.Applicant.LastName,
-                            Email = application.Applicant.Email,
+                            Email = application.Applicant.Email
                         }
                     })
                     .ToList()
