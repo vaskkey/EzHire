@@ -50,7 +50,7 @@ export function LoginForm() {
 						onChange={(ev) => setPassword(ev.target.value)}
 					/>
 
-					<button className="btn btn-neutral mt-4">Login</button>
+					<button className="btn btn-success mt-4">Login</button>
 				</fieldset>
 			</form>
 		</div>

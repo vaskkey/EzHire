@@ -36,7 +36,7 @@ export default function Campaigns() {
 						<h2 className="font-extrabold text-3xl mb-4">Kampanie</h2>
 					</div>
 					{isManager && (
-						<button className="btn btn-neutral text-white" onClick={() => setModalOpen(true)}>
+						<button className="btn btn-success text-white" onClick={() => setModalOpen(true)}>
 							Utwórz nową
 						</button>
 					)}

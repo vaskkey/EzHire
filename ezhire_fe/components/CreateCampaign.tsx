@@ -67,7 +67,7 @@ export function CreateCampaign({ open, setOpen, done }: Props) {
 							<option value={CampaignPriority.MEDIUM}>Średni</option>
 							<option value={CampaignPriority.HIGH}>Wysoki</option>
 						</select>
-						<button className="btn btn-neutral">Utwórz</button>
+						<button className="btn btn-success">Utwórz</button>
 					</fieldset>
 				</form>
 			</div>

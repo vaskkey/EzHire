@@ -55,6 +55,8 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
     {
         return await data.JobPostings
             .Include(posting => posting.Campaign)
+            .Include(posting => posting.Applications)
+            .ThenInclude(application => application.Applicant)
             .Where(post => post.Id == postingId)
             .Select(post => new JobPostingGetDto
             {
@@ -73,7 +75,27 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
                     UpdatedAt = post.Campaign.UpdatedAt,
                     Name = post.Campaign.Name,
                     Priority = post.Campaign.Priority
-                }
+                },
+                Applications = post.Applications.Select(application => new JobApplicationGetDto
+                    {
+                        Id = application.Id,
+                        CreatedAt = application.CreatedAt,
+                        UpdatedAt = application.UpdatedAt,
+                        DateApplied = application.DateApplied,
+                        Status = application.Status,
+                        PostingId = application.PostingId,
+                        ApplicantId = application.ApplicantId,
+                        Applicant = new ApplicantDto
+                        {
+                            Id = application.Applicant.Id,
+                            CreatedAt = application.Applicant.CreatedAt,
+                            UpdatedAt = application.Applicant.UpdatedAt,
+                            FirstName = application.Applicant.FirstName,
+                            LastName = application.Applicant.LastName,
+                            Email = application.Applicant.Email,
+                        }
+                    })
+                    .ToList()
             })
             .FirstOrDefaultAsync(cancellation);
     }
@@ -123,5 +145,6 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
         data.JobApplications.UpdateRange(applications);
 
         applications.ForEach(application => application.Status = ApplicationStatus.REJECTED);
+        await data.SaveChangesAsync(cancellation);
     }
 }

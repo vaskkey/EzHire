@@ -10,8 +10,24 @@ export enum CampaignPriority {
 	HIGH = 2,
 }
 
+export type CampaignPostingObject = components["schemas"]["CampaignPostingGetDto"];
+export enum PostingStatus {
+	OPEN = 0,
+	CLOSED = 1,
+}
+
+export type JobPostingObject = components["schemas"]["JobPostingGetDto"];
+
 export type CandidateObject = components["schemas"]["CandidateGetDto"];
 export type ExperienceObject = components["schemas"]["CandidateExperienceGetDto"];
+export type JobApplication = components["schemas"]["JobApplicationGetDto"];
+
+export enum ApplicantStatus {
+	APPLIED = 0,
+	PENDING = 1,
+	REJECTED = 2,
+	ACCEPTED = 3,
+}
 
 export type User = components["schemas"]["UserGetDto"];
 export enum UserType {

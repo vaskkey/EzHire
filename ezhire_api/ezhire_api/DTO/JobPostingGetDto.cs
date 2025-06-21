@@ -27,4 +27,5 @@ public class JobPostingGetDto : BaseResponseDto
     [Required] public int CampaignId { get; set; }
 
     [Required] public PostingCampaignDto Campaign { get; set; } = null!;
+    [Required] public ICollection<JobApplicationGetDto> Applications { get; set; } = null!;
 }
