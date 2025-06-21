@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ezhire_api", "ezhire_api\ezhire_api.csproj", "{4F7245E7-33CC-405D-845E-2E38758C027C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ezhire_api_unit_tests", "ezhire_api_unit_tests\ezhire_api_unit_tests.csproj", "{7F06920E-CE61-4468-9CF8-F52440C3B366}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{4F7245E7-33CC-405D-845E-2E38758C027C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F7245E7-33CC-405D-845E-2E38758C027C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7245E7-33CC-405D-845E-2E38758C027C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F06920E-CE61-4468-9CF8-F52440C3B366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F06920E-CE61-4468-9CF8-F52440C3B366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F06920E-CE61-4468-9CF8-F52440C3B366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F06920E-CE61-4468-9CF8-F52440C3B366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
