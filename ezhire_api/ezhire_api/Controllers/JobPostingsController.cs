@@ -17,7 +17,6 @@ public class JobPostingsController(IJobPostingsService postings, IAuthService au
         return Ok(await postings.GetAllForId(cancellation, campaignId));
     }
 
-    [AllowAnonymous]
     [ProducesResponseType(typeof(JobPostingGetDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [HttpGet("{id:int}")]

@@ -47,7 +47,7 @@ public class RecruitmentCampaignsController(
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AddPosting(CancellationToken cancellation, [FromRoute] int id,
-        [FromBody] JobPostingCreateDto postingData)
+        [FromBody] CampaignPostingCreateDto postingData)
     {
         await auth.ValidateRole(cancellation, User.Identity, UserType.HIRING_MANAGER);
         var campaign = await campaigns.GetById(cancellation, id);

@@ -1,11 +1,15 @@
 "use client";
 
-import { client, CampaignObject, CampaignPriority, PostingStatus } from "@/api/client";
+import { client, CampaignObject, CampaignPriority, PostingStatus, UserType } from "@/api/client";
+import { UserContext } from "@/app/context/auth";
+import { CreatePosting } from "@/components/CreatePosting";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 export default function Postings({ params }: { params: Promise<{ campaignId: number }> }) {
+	const currentUser = useContext(UserContext);
+
 	const [campaign, setCampaign] = useState<CampaignObject>({
 		id: 0,
 		name: "",
@@ -16,6 +20,8 @@ export default function Postings({ params }: { params: Promise<{ campaignId: num
 	});
 	const [campaignId, setCampaignId] = useState<number>(0);
 	const [isLoading, setLoading] = useState(true);
+	const [modalOpen, setModalOpen] = useState(false);
+
 	const router = useRouter();
 
 	const badgeStatus = new Map([
@@ -39,6 +45,8 @@ export default function Postings({ params }: { params: Promise<{ campaignId: num
 		[PostingStatus.OPEN, "Otwarte"],
 		[PostingStatus.CLOSED, "Zamknięte"],
 	]);
+
+	const isManager = useMemo(() => currentUser?.userType === UserType.HIRING_MANAGER, [currentUser]);
 
 	async function fetchCampaign() {
 		setLoading(true);
@@ -80,13 +88,18 @@ export default function Postings({ params }: { params: Promise<{ campaignId: num
 								</h5>
 							</div>
 						</div>
+						{isManager && (
+							<button className="btn btn-success text-white" onClick={() => setModalOpen(true)}>
+								Utwórz Ogłoszenie
+							</button>
+						)}
 					</div>
 					<div className="overflow-x-auto mt-20">
 						<table className="table">
 							<thead>
 								<tr>
-									<th>Imię</th>
-									<th>Data Aplikacji</th>
+									<th>Nazwa</th>
+									<th>Data Utworzenia</th>
 									<th>Status</th>
 								</tr>
 							</thead>
@@ -96,7 +109,7 @@ export default function Postings({ params }: { params: Promise<{ campaignId: num
 										<td>
 											<Link href={`/campaigns/${campaignId}/postings/${posting.id}`}>{posting.jobName}</Link>
 										</td>
-										<td>{posting.datePosted}</td>
+										<td>{posting?.datePosted && new Date(posting?.datePosted).toLocaleString()}</td>
 										<td>
 											<span
 												className={`badge badge-xs badge-soft ${postingStatus.get(posting.status) ?? PostingStatus.OPEN}`}
@@ -109,6 +122,7 @@ export default function Postings({ params }: { params: Promise<{ campaignId: num
 							</tbody>
 						</table>
 					</div>
+					<CreatePosting open={modalOpen} campaignId={campaignId} setOpen={setModalOpen} done={fetchCampaign} />
 				</>
 			)}
 		</div>

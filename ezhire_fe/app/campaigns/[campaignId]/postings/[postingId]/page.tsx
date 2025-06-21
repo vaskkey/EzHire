@@ -106,7 +106,10 @@ export default function Posting({ params }: { params: Promise<{ postingId: numbe
 							</button>
 						)}
 					</div>
-					<div className="overflow-x-auto mt-20">
+					<article className="my-5">
+						<p>{posting?.description}</p>
+					</article>
+					<div className="overflow-x-auto mt-15">
 						<table className="table">
 							<thead>
 								<tr>

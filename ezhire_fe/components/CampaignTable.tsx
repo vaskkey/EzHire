@@ -23,6 +23,7 @@ export default function CampaignsTable({ campaigns }: Props) {
 			<thead>
 				<tr>
 					<th>Nazwa</th>
+					<th>Priorytet</th>
 				</tr>
 			</thead>
 			<tbody>

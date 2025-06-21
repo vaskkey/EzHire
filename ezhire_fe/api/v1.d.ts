@@ -811,9 +811,9 @@ export interface paths {
 			};
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["JobPostingCreateDto"];
-					"text/json": components["schemas"]["JobPostingCreateDto"];
-					"application/*+json": components["schemas"]["JobPostingCreateDto"];
+					"application/json": components["schemas"]["CampaignPostingCreateDto"];
+					"text/json": components["schemas"]["CampaignPostingCreateDto"];
+					"application/*+json": components["schemas"]["CampaignPostingCreateDto"];
 				};
 			};
 			responses: {
@@ -1005,6 +1005,10 @@ export interface components {
 			applicationId: number;
 		};
 		ApplicationStatus: number;
+		CampaignPostingCreateDto: {
+			jobName: string;
+			description: string;
+		};
 		CampaignPostingGetDto: {
 			jobName: string;
 			/** Format: date-time */
@@ -1096,15 +1100,6 @@ export interface components {
 			createdAt: string;
 			/** Format: date-time */
 			updatedAt: string;
-		};
-		JobPostingCreateDto: {
-			/** Format: date-time */
-			datePosted: string;
-			/** Format: int32 */
-			campaignId?: number;
-			status: components["schemas"]["PostingStatus"];
-			jobName: string;
-			description: string;
 		};
 		JobPostingGetDto: {
 			jobName: string;
