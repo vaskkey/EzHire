@@ -5,20 +5,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
+/// <summary>
+/// Interface for accessing and managing candidate data, experience, and offers.
+/// </summary>
 public interface ICandidateRepository
 {
-    public Task<ICollection<CandidateGetDto>> GetAll(CancellationToken cancellation);
+    /// <summary>
+    /// Retrieves all candidates in the system.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <returns>A collection of all candidate DTOs, each including their experience history.</returns>
+    Task<ICollection<CandidateGetDto>> GetAll(CancellationToken cancellation);
+
+    /// <summary>
+    /// Creates a new candidate and their experiences.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="candidate">The data required for creating the candidate, including experiences.</param>
+    /// <returns>The created candidate DTO, with all associated experiences.</returns>
     Task<CandidateGetDto> Create(CancellationToken cancellation, CandidateCreateDto candidate);
 
+    /// <summary>
+    /// Creates a new experience entry for an existing candidate.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="candidateId">The unique identifier of the candidate.</param>
+    /// <param name="experience">The details of the candidate's experience to be added.</param>
+    /// <returns>The created experience entity.</returns>
     Task<Experience> CreateExperience(CancellationToken cancellation, int candidateId,
         CandidateExperienceCreateDto experience);
 
+    /// <summary>
+    /// Retrieves a candidate by their unique identifier.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="id">The unique identifier of the candidate.</param>
+    /// <returns>The candidate DTO with experiences, or null if not found.</returns>
     Task<CandidateGetDto?> GetById(CancellationToken cancellation, int id);
+
+    /// <summary>
+    /// Creates a new offer for a candidate.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="offerCreateDto">The data required to create an offer.</param>
+    /// <returns>The created offer DTO.</returns>
     Task<OfferGetDto> CreateOffer(CancellationToken cancellation, OfferCreateDto offerCreateDto);
 }
 
 public class CandidatesRepository(EzHireContext data) : ICandidateRepository
 {
+    /// <inheritdoc />
     public async Task<ICollection<CandidateGetDto>> GetAll(CancellationToken cancellation)
     {
         return await data.Candidates.Select(candidate => new CandidateGetDto
@@ -43,6 +79,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
             .ToListAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<CandidateGetDto> Create(CancellationToken cancellation, CandidateCreateDto candidate)
     {
         var entity = await data.Candidates.AddAsync(new Candidate
@@ -81,6 +118,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
         };
     }
 
+    /// <inheritdoc />
     public async Task<Experience> CreateExperience(CancellationToken cancellation, int candidateId,
         CandidateExperienceCreateDto experience)
     {
@@ -96,6 +134,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
         return entity.Entity;
     }
 
+    /// <inheritdoc />
     public Task<CandidateGetDto?> GetById(CancellationToken cancellation, int id)
     {
         return data.Candidates
@@ -122,6 +161,7 @@ public class CandidatesRepository(EzHireContext data) : ICandidateRepository
             .FirstOrDefaultAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<OfferGetDto> CreateOffer(CancellationToken cancellation, OfferCreateDto offerCreateDto)
     {
         var entity = await data.Offers.AddAsync(new Offer

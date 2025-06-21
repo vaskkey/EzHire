@@ -6,29 +6,97 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
+/// <summary>
+/// Interface for managing job applications and their related meetings.
+/// </summary>
 public interface IJobApplicationsRepository
 {
-    Task<JobApplicationGetDto?> GetById(CancellationToken cancellation, int id);
-    Task<JobApplicationGetDto?> GetByEmail(CancellationToken cancellation, string candidateEmail, int postingId);
-    public Task<JobApplicationGetDto> Create(CancellationToken cancellation, JobApplicationCreateDto application);
-
-    Task<JobApplicationGetDto?> ChangeStatus(CancellationToken cancellation, int applicationId,
-        ApplicationStatus status);
-
+    /// <summary>
+    /// Retrieves all job applications for a specific job posting.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="postingId">The unique identifier of the job posting.</param>
+    /// <returns>A collection of job application DTOs for the posting.</returns>
     Task<ICollection<PostingApplicationDto>> GetByPostingId(CancellationToken cancellation, int postingId);
-    Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId, int stageId);
+
+    /// <summary>
+    /// Retrieves a job application by its unique identifier.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="applicationId">The unique identifier of the job application.</param>
+    /// <returns>The job application DTO, or null if not found.</returns>
+    Task<JobApplicationGetDto?> GetById(CancellationToken cancellation, int applicationId);
+
+    /// <summary>
+    /// Creates a new job application.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="application">The job application creation data.</param>
+    /// <returns>The created job application DTO.</returns>
+    Task<JobApplicationGetDto> Create(CancellationToken cancellation, JobApplicationCreateDto application);
+
+    /// <summary>
+    /// Changes the status of a job application.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="applicationId">The unique identifier of the job application.</param>
+    /// <param name="newStatus">The new status to set for the application.</param>
+    /// <returns>The updated job application DTO, or null if not found.</returns>
+    Task<JobApplicationGetDto?> ChangeStatus(CancellationToken cancellation, int applicationId,
+        ApplicationStatus newStatus);
+
+    /// <summary>
+    /// Retrieves a meeting associated with a job application and recruitment stage.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="applicationId">The unique identifier of the job application.</param>
+    /// <param name="recruitmentStageId">The unique identifier of the recruitment stage.</param>
+    /// <returns>The recruitment stage meeting DTO, or null if not found.</returns>
+    Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId,
+        int recruitmentStageId);
+
+    /// <summary>
+    /// Retrieves a meeting by its id
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="meetingId">The unique identifier of the meeting.</param>
+    /// <returns></returns>
     Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int meetingId);
 
-    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int id,
-        ApplicationMeetingPlanDto plannedMeeting);
+    /// <summary>
+    /// Plans a new meeting for a job application in a given recruitment stage.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="applicationId">The unique identifier of the job application.</param>
+    /// <param name="meeting">The details of the meeting to plan.</param>
+    /// <returns>The created recruitment stage meeting DTO.</returns>
+    Task<RecruitmentStageMeetingGetDto> PlanMeeting(CancellationToken cancellation, int applicationId,
+        ApplicationMeetingPlanDto meeting);
 
-    Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
-        ApplicationMeetingLogDto meetingLog);
+    /// <summary>
+    /// Logs details for a meeting of a job application and recruitment stage.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="applicationId">The unique identifier of the job application.</param>
+    /// <param name="meeting">The meeting log details (held date, notes, etc).</param>
+    /// <returns>The updated recruitment stage meeting DTO, or null if not found.</returns>
+    Task<RecruitmentStageMeetingGetDto?> LogMeeting(CancellationToken cancellation, int applicationId,
+        ApplicationMeetingLogDto meeting);
+
+    /// <summary>
+    /// Retrieves a job application by candidate email and posting ID. Used to check for duplicate applications.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="email">The email address of the candidate.</param>
+    /// <param name="postingId">The unique identifier of the job posting.</param>
+    /// <returns>The job application DTO, or null if not found.</returns>
+    Task<JobApplicationGetDto?> GetByEmail(CancellationToken cancellation, string email, int postingId);
 }
 
 public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRepository stages)
     : IJobApplicationsRepository
 {
+    /// <inheritdoc />
     public async Task<JobApplicationGetDto?> GetById(CancellationToken cancellation, int id)
     {
         return await data.JobApplications
@@ -65,6 +133,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
             .FirstOrDefaultAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<JobApplicationGetDto?> GetByEmail(CancellationToken cancellation, string candidateEmail,
         int postingId)
     {
@@ -102,6 +171,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
             .FirstOrDefaultAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<JobApplicationGetDto> Create(CancellationToken cancellation, JobApplicationCreateDto application)
     {
         var entity = await data.JobApplications.AddAsync(new JobApplication
@@ -117,6 +187,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
         return await GetById(cancellation, entity.Entity.Id);
     }
 
+    /// <inheritdoc />
     public async Task<JobApplicationGetDto?> ChangeStatus(CancellationToken cancellation, int applicationId,
         ApplicationStatus status)
     {
@@ -165,6 +236,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
         };
     }
 
+    /// <inheritdoc />
     public async Task<ICollection<PostingApplicationDto>> GetByPostingId(CancellationToken cancellation, int postingId)
     {
         return await data.JobApplications
@@ -192,6 +264,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
             .ToListAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int applicationId,
         int stageId)
     {
@@ -222,6 +295,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
             .FirstOrDefaultAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<RecruitmentStageMeetingGetDto?> GetMeeting(CancellationToken cancellation, int meetingId)
     {
         return await data.RecruitmentStageMeetings
@@ -264,6 +338,7 @@ public class JobApplicationsRepository(EzHireContext data, IRecruitmentStagesRep
         return await GetMeeting(cancellation, plannedMeeting.ApplicationId, plannedMeeting.RecruitmentStageId);
     }
 
+    /// <inheritdoc />
     public async Task<RecruitmentStageMeetingGetDto> LogMeeting(CancellationToken cancellation, int id,
         ApplicationMeetingLogDto meetingLog)
     {

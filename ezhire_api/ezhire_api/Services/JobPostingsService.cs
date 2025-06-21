@@ -6,14 +6,55 @@ using ezhire_api.Repositories;
 
 namespace ezhire_api.Services;
 
+/// <summary>
+/// Defines operations related to job postings, including creation, retrieval, closing,
+/// and handling job applications.
+/// </summary>
 public interface IJobPostingsService
 {
-    public Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, int id,
-        CampaignPostingCreateDto posting);
+    /// <summary>
+    /// Adds a new job posting to a given recruitment campaign.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="id">The campaign's unique identifier.</param>
+    /// <param name="posting">Data for the posting to create.</param>
+    /// <returns>The created job posting DTO.</returns>
+    Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, int id, CampaignPostingCreateDto posting);
 
+    /// <summary>
+    /// Retrieves all job postings, or all for a given campaign if campaignId is provided.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="campaignId">Optional campaign ID to filter postings.</param>
+    /// <returns>Collection of campaign posting DTOs.</returns>
     Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId);
+
+    /// <summary>
+    /// Retrieves a job posting by its unique identifier.
+    /// Throws NotFound if the posting does not exist.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="postingId">The posting's unique identifier.</param>
+    /// <returns>The job posting DTO.</returns>
     Task<JobPostingGetDto> GetById(CancellationToken cancellation, int postingId);
+
+    /// <summary>
+    /// Applies to a job posting as a new or existing candidate.
+    /// Throws if posting is closed or if duplicate application exists.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="id">The posting's unique identifier.</param>
+    /// <param name="candidateApplication">Details of the candidate/application.</param>
+    /// <returns>The created job application DTO.</returns>
     Task<JobApplicationGetDto> Apply(CancellationToken cancellation, int id, CandidateCreateDto candidateApplication);
+
+    /// <summary>
+    /// Closes a job posting, rejecting all remaining applicants.
+    /// Throws if posting is not open.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="postingId">The posting's unique identifier.</param>
+    /// <returns>The updated (closed) job posting DTO.</returns>
     Task<JobPostingGetDto> Close(CancellationToken cancellation, int postingId);
 }
 
@@ -23,6 +64,7 @@ public class JobPostingsService(
     ICandidatesService candidates)
     : IJobPostingsService
 {
+    /// <inheritdoc/>
     public async Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, int id,
         CampaignPostingCreateDto posting)
     {
@@ -36,11 +78,13 @@ public class JobPostingsService(
         });
     }
 
+    /// <inheritdoc/>
     public async Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId)
     {
         return await jobPosting.GetAllForId(cancellation, campaignId);
     }
 
+    /// <inheritdoc/>
     public async Task<JobPostingGetDto> GetById(CancellationToken cancellation, int postingId)
     {
         var posting = await jobPosting.GetById(cancellation, postingId);
@@ -49,6 +93,7 @@ public class JobPostingsService(
         return posting;
     }
 
+    /// <inheritdoc/>
     public async Task<JobApplicationGetDto> Apply(CancellationToken cancellation, int id,
         CandidateCreateDto candidateApplication)
     {
@@ -76,6 +121,7 @@ public class JobPostingsService(
         return newApplication;
     }
 
+    /// <inheritdoc/>
     public async Task<JobPostingGetDto> Close(CancellationToken cancellation, int postingId)
     {
         var posting = await GetById(cancellation, postingId);

@@ -6,12 +6,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
+/// <summary>
+/// Interface for managing recruitment campaigns, including retrieval and creation.
+/// </summary>
 public interface IRecruitmentCampaignsRepository
 {
-    public Task<ICollection<RecruitmentCampaignGetDto>> GetAll(CancellationToken cancellation);
-    public Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id);
+    /// <summary>
+    /// Retrieves all recruitment campaigns.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <returns>A collection of all recruitment campaign DTOs.</returns>
+    Task<ICollection<RecruitmentCampaignGetDto>> GetAll(CancellationToken cancellation);
 
-    public Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign,
+    /// <summary>
+    /// Retrieves a recruitment campaign by its unique identifier.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="id">The unique identifier of the recruitment campaign.</param>
+    /// <returns>The recruitment campaign DTO, or null if not found.</returns>
+    Task<RecruitmentCampaignGetDto?> GetById(CancellationToken cancellation, int id);
+
+    /// <summary>
+    /// Creates a new recruitment campaign.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="campaign">The recruitment campaign creation data.</param>
+    /// <param name="user">The user (manager) creating the campaign.</param>
+    /// <returns>The created recruitment campaign DTO.</returns>
+    Task<RecruitmentCampaignGetDto> Create(CancellationToken cancellation, RecruitmentCampaignCreateDto campaign,
         UserGetDto user);
 }
 

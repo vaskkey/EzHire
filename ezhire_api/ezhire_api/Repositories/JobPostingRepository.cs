@@ -6,17 +6,55 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
+/// <summary>
+/// Interface for managing job postings, including creation, retrieval, closing, and applicant rejection.
+/// </summary>
 public interface IJobPostingRepository
 {
+    /// <summary>
+    /// Adds a new job posting.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="posting">The job posting creation data.</param>
+    /// <returns>The created job posting DTO.</returns>
     public Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, JobPostingCreateDto posting);
+
+    /// <summary>
+    /// Retrieves all job postings for a specific campaign, or all if campaignId is null.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="campaignId">The unique identifier of the campaign, or null to get all postings.</param>
+    /// <returns>A collection of campaign posting DTOs.</returns>
     Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId);
+
+    /// <summary>
+    /// Retrieves a job posting by its unique identifier.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="postingId">The unique identifier of the job posting.</param>
+    /// <returns>The job posting DTO, or null if not found.</returns>
     Task<JobPostingGetDto?> GetById(CancellationToken cancellation, int postingId);
+
+    /// <summary>
+    /// Closes a job posting.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="postingToClose">The job posting DTO to close.</param>
+    /// <returns>The closed job posting DTO.</returns>
     Task<JobPostingGetDto> Close(CancellationToken cancellation, JobPostingGetDto postingToClose);
+
+    /// <summary>
+    /// Rejects all remaining applicants for a job posting.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="posting">The job posting DTO for which to reject applicants.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     Task RejectRemainingApplicants(CancellationToken cancellation, JobPostingGetDto posting);
 }
 
 public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
 {
+    /// <inheritdoc />
     public async Task<JobPostingGetDto> AddPosting(CancellationToken cancellation, JobPostingCreateDto posting)
     {
         var entry = await data.JobPostings.AddAsync(new JobPosting
@@ -33,6 +71,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
         return await GetById(cancellation, entry.Entity.Id);
     }
 
+    /// <inheritdoc />
     public async Task<ICollection<CampaignPostingGetDto>> GetAllForId(CancellationToken cancellation, int? campaignId)
     {
         return await data.JobPostings
@@ -51,6 +90,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
             .ToListAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<JobPostingGetDto?> GetById(CancellationToken cancellation, int postingId)
     {
         return await data.JobPostings
@@ -100,6 +140,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
             .FirstOrDefaultAsync(cancellation);
     }
 
+    /// <inheritdoc />
     public async Task<JobPostingGetDto> Close(CancellationToken cancellation, JobPostingGetDto postingToClose)
     {
         var posting = await data.JobPostings
@@ -134,6 +175,7 @@ public class JobPostingRepository(EzHireContext data) : IJobPostingRepository
         };
     }
 
+    /// <inheritdoc />
     public async Task RejectRemainingApplicants(CancellationToken cancellation, JobPostingGetDto posting)
     {
         var applications = await data.JobApplications

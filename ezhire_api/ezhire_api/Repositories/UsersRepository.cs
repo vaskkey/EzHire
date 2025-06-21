@@ -5,13 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ezhire_api.Repositories;
 
+/// <summary>
+/// Interface for retrieving user information by email address.
+/// </summary>
 public interface IUsersRepository
 {
+    /// <summary>
+    /// Retrieves a user DTO by their email address.
+    /// </summary>
+    /// <param name="cancellation">Cancellation token for async operation.</param>
+    /// <param name="email">The email address of the user to retrieve. If null, returns null.</param>
+    /// <returns>The user DTO (RecruiterGetDto or HiringManagerGetDto), or null if not found or email is null.</returns>
     Task<UserGetDto?> GetUserByEmail(CancellationToken cancellation, string? email);
 }
 
 public class UsersRepository(EzHireContext data) : IUsersRepository
 {
+    /// <inheritdoc />
     public async Task<UserGetDto?> GetUserByEmail(CancellationToken cancellation, string? email)
     {
         if (email == null) return null;
