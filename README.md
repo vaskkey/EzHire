@@ -231,7 +231,6 @@ dotnet ef database update
 
 4. Run the API:
 ```bash
-cd ezhire_api
 dotnet run
 ```
 
@@ -279,7 +278,6 @@ docker run -p 8080:8080 ezhire-api
 
 When running in development mode, the API exposes OpenAPI documentation:
 - OpenAPI JSON: `http://localhost:5011/openapi/v1.json`
-- Interactive docs available via the development environment
 
 ### Type Generation for Frontend
 
@@ -287,7 +285,7 @@ The frontend uses auto-generated TypeScript types from the OpenAPI spec:
 
 ```bash
 cd ezhire_fe
-bun run schema
+bun schema
 ```
 
 This generates `api/v1.d.ts` with all API types and endpoints.
@@ -306,9 +304,9 @@ This generates `api/v1.d.ts` with all API types and endpoints.
 1. Create/modify pages in `app/`
 2. Build reusable components in `components/`
 3. Use type-safe API client from `api/client.ts`
-4. Update API types: `bun run schema` (when backend changes)
-5. Lint code: `bun run lint`
-6. Format code: `bun run format`
+4. Update API types: `bun schema` (when backend changes)
+5. Lint code: `bun lint`
+6. Format code: `bun format`
 
 ## 🧪 Testing
 
